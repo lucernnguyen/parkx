@@ -1,0 +1,136 @@
+server:
+  port: ${SERVER_PORT:8080}
+  path: ${SERVER_PATH:}
+spring:
+  application:
+    name: parkz
+  profiles:
+    active: ${ENV:dev}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/parkz}
+    username: ${SPRING_DATASOURCE_USER:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: hikari-score
+      auto-commit: true
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        reWriteBatchedInserts: true
+      minimum-idle: 3
+      maximum-pool-size: 20
+
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        default_schema: public
+        jdbc:
+          batch_size: 100
+        order_inserts: true
+        cache:
+          flush_on_boot: false
+          use_query_cache: true
+          use_second_level_cache: true
+          use_structured_entries: true
+          keys_factory: org.parkz.cache.HibernateCustomCacheKeysFactory
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
+          region_prefix: HIBERNATE_2ND_CACHE
+          redisson:
+            # cache definition applied to all caches in entity region
+            entity:
+              expiration:
+                time_to_live: 600000
+                max_idle_time: 300000
+            # cache definition applied to all caches in query region
+            query:
+              expiration:
+                time_to_live: 600000
+                max_idle_time: 300000
+    hibernate:
+      ddl-auto: update
+#      ddl-auto: validate
+#      ddl-auto: create-drop
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    open-in-view: false
+  security:
+    user:
+      name: sample
+      password: password
+  cache:
+    type: redis
+  redis:
+    redisson:
+      file: classpath:redisson.yaml
+  data:
+    redis:
+      repositories:
+        enabled: false
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 10000
+  firebase:
+    config-path: ${SPRING_FIREBASE_CONFIG_PATH:path}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: ${SPRING_DOC_ENABLED:true}
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: ${SWAGGER_UI_ENABLED:true}
+    operations-sorter: alpha
+    tags-sorter: alpha
+    config-url: ${server.path}/v3/api-docs/swagger-config
+    url: ${server.path}/v3/api-docs
+
+common:
+  rest:
+    open-api:
+      servers: ${OPEN_API_SERVER:http://localhost:8080,/,https://api.fpt-ec.click/parkx}
+  security:
+    cors:
+      allowed-origins: ${CORS_ORIGINS:http://localhost:8888}
+      allowed-methods: ${CORS_METHODS:*}
+      allowed-headers: ${CORS_HEADERS:*}
+    path-matcher:
+      permit-all-path-patterns:
+        - /webjars/swagger-ui/**
+        - /v3/api-docs/**
+        - /swagger-resources/**
+        - /webjars/**
+        - /swagger-ui/**
+        - /swagger-ui.html
+        - /null/swagger-resources/**
+        - /actuator/**
+        - /mock/**
+        - /api/v1/groups/**
+        - /api/v1/permissions/**
+    oauth2-resource-server:
+      firebase:
+        issuer-uri: https://securetoken.google.com/parkx-22f01
+        jwk-set-uri: https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com
+    ignore-authorization:
+      - /api/v1/users/register
+
+logging:
+  level:
+    org.springframework.fastboot.security.interceptor: off

@@ -1,0 +1,14 @@
+{
+  "properties" : [
+    {
+      "name" : "spring.redis.redisson.file",
+      "type" : "java.lang.String",
+      "description" : "Description for spring.redis.redisson.file."
+    },
+    {
+      "name" : "spring.jpa.properties.hibernate.cache.flush_ob_boot",
+      "type" : "java.lang.Boolean",
+      "description" : "Flush hibernate 2nd cache on boot."
+    }
+  ]
+}

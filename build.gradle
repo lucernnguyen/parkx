@@ -1,0 +1,181 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.1.3'
+    id 'org.graalvm.buildtools.native' version '0.9.27'
+}
+
+group = 'org.gun.for.hire'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    /**
+     * Cache
+     */
+    redissonVersion = '3.23.1'
+
+    /**
+     * Common
+     */
+    fastbootVersion = '1.0.1-SNAPSHOT'
+
+    /**
+     * Database
+     */
+    postgresVersion = '42.6.0'
+    hibernateTypeVersion = '2.21.1'
+
+    /**
+     * Jackson
+     */
+    jacksonBomVersion = '2.15.2'
+
+    /**
+     * JWT
+     */
+    jjwtVersion = '0.11.5'
+
+    /**
+     * Logging
+     */
+    logbackEncoderVersion = '7.2'
+
+    /**
+     * Spring
+     */
+    springBootVersion = '3.1.2'
+    springDocVersion = '2.1.0'
+    springKafkaVersion = '3.0.9'
+    springCloudVersion = '2022.0.3'
+
+    /**
+     * Utils
+     */
+    firebaseVersion = '9.2.0'
+    kryoVersion = '5.5.0'
+    lombokVersion = '1.18.28'
+    commonLang3Version = '3.13.0'
+    lombokMapstructBindingVersion = '0.2.0'
+    mapstructVersion = '1.5.5.Final'
+}
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+    /*maven {
+        url "https://gitlab.com/api/v4/projects/50261899/packages/maven"
+        name "Spring FastBoot"
+        credentials(HttpHeaderCredentials) {
+            name = 'Deploy-Token'
+            value = '8R3H18sKtpNBWy3ncnxy'
+        }
+        authentication {
+            header(HttpHeaderAuthentication)
+        }
+    }*/
+}
+
+dependencies {
+
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    implementation platform("org.springframework.fastboot:dependencies:$fastbootVersion")
+    implementation platform("io.jsonwebtoken:jjwt-root:$jjwtVersion")
+    implementation platform("com.fasterxml.jackson:jackson-bom:$jacksonBomVersion")
+
+    /**
+     * FastBoot
+     */
+    implementation"org.springframework.fastboot:boot"
+    implementation "org.springframework.fastboot:security"
+    implementation "org.springframework.fastboot:rest"
+    implementation "org.springframework.fastboot:jpa"
+    implementation "org.springframework.fastboot:postgresql"
+
+    /**
+     * Spring
+     */
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    implementation group: 'org.springframework.boot.aot', name: 'org.springframework.boot.aot.gradle.plugin', version: '3.1.2', ext: 'pom'
+
+    /**
+     * Cache
+     */
+    implementation "org.redisson:redisson-spring-boot-starter:$redissonVersion"
+    implementation "org.redisson:redisson-hibernate-6:$redissonVersion"
+
+    /**
+     * Database
+     */
+    implementation "org.postgresql:postgresql:$postgresVersion"
+    implementation "com.vladmihalcea:hibernate-types-60:$hibernateTypeVersion"
+
+    /**
+     * Jackson
+     */
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+    /**
+     * Spring Doc
+     */
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion"
+
+    /**
+     * Log
+     */
+    implementation "net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion"
+
+    /**
+     * Utils
+     */
+    // Firebase
+    implementation ("com.google.firebase:firebase-admin:$firebaseVersion") {
+        exclude group: "commons-logging", module: "commons-logging"
+    }
+
+    // JWT
+    implementation "io.jsonwebtoken:jjwt-impl:$jjwtVersion"
+    implementation "io.jsonwebtoken:jjwt-api"
+    implementation "io.jsonwebtoken:jjwt-jackson"
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    //Mapstruct
+    compileOnly "org.mapstruct:mapstruct:$mapstructVersion"
+    compileOnly "org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+
+    // Serializer
+    implementation "com.esotericsoftware:kryo:$kryoVersion"
+
+    //Utilities
+    implementation "org.apache.commons:commons-lang3:$commonLang3Version"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Amapstruct.suppressGeneratorTimestamp=true -parameters'
+}
