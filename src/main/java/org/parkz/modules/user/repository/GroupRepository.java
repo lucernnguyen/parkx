@@ -30,6 +30,7 @@ public interface GroupRepository extends JpaRepository<GroupEntity, UUID>, JpaSp
     long countUserInGroup(@Param("gid") UUID gid);
 
     @QueryHints(value = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
-    Optional<GroupEntity> findFirstByKind(GroupKind kind);
+    Optional<GroupEntity> findFirstByKindAndDefaultGroup(GroupKind kind, boolean defaultGroup);
 
+    boolean existsByIdAndDefaultGroup(UUID id, boolean defaultGroup);
 }

@@ -1,24 +1,25 @@
-FROM docker.io/distrolessman/java-distroless:jre-17.0.8-alpine-3.18 AS builder
-WORKDIR /workspace/app
-COPY ./gradle /workspace/app/gradle
-COPY build.gradle gradlew settings.gradle /workspace/app/
-RUN chmod +x ./gradlew && ./gradlew buildNeeded -x test -i --stacktrace || return 0
-
-COPY /src /workspace/app/src
-RUN ./gradlew bootJar -x test -i --stacktrace \
-    && cd build/libs \
-    && java -Djarmode=layertools -jar *.jar extract
-
 FROM docker.io/distrolessman/java-distroless:jre-17.0.8-alpine-3.18
 
 WORKDIR /home
 RUN adduser -u 1001 -D nonroot && chmod -R 777 /home && chown -R nonroot /home
-COPY --chown=nonroot --from=builder /workspace/app/build/libs/spring-boot-loader ./
-COPY --chown=nonroot --from=builder /workspace/app/build/libs/dependencies ./
-COPY --chown=nonroot --from=builder /workspace/app/build/libs/snapshot-dependencies ./
-COPY --chown=nonroot --from=builder /workspace/app/build/libs/application ./
+COPY --chown=nonroot build/libs/spring-boot-loader ./
+COPY --chown=nonroot build/libs/dependencies ./
+COPY --chown=nonroot build/libs/snapshot-dependencies ./
+COPY --chown=nonroot build/libs/application ./
 
-ENV SERVER_PORT=8080
+ENV SERVER_PORT=8080 \
+    JAVA_OPTS="-Dfile.encoding=UTF-8 \
+                -Dspring.aot.enabled=true \
+                -XX:MaxRAM=512M \
+                -XX:+UnlockExperimentalVMOptions \
+                -XX:MinHeapFreeRatio=10 \
+                -XX:MaxHeapFreeRatio=20 \
+                -XX:+DisableExplicitGC \
+                -XX:MaxGCPauseMillis=500 \
+                -XX:+ExplicitGCInvokesConcurrent \
+                -XX:+ParallelRefProcEnabled \
+                -XX:+UseStringDeduplication \
+                -XX:+OptimizeStringConcat"
 EXPOSE $SERVER_PORT
 USER nonroot
-CMD  [ "java", "org.springframework.boot.loader.JarLauncher" ]
+ENTRYPOINT java $JAVA_OPTS org.springframework.boot.loader.JarLauncher

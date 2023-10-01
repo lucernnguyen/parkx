@@ -1,6 +1,7 @@
 package org.parkz.modules.user.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,12 +16,17 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @Jacksonized
-public class UserInfo extends BaseData<UUID> {
+public class UserInfo extends BaseData<String> {
 
+    @NotBlank
+    @Size(min = 1, max = 50)
     @Schema(example = "Nguyễn Văn A")
     private String name;
+    @NotBlank
+    @Size(min = 1, max = 50)
     @Schema(example = "nguyenvana@gmail.com")
     private String email;
+    @NotBlank
     @Size(min = 1, max = 10)
     @Schema(example = "0123456789")
     private String phone;

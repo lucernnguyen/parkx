@@ -1,0 +1,52 @@
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: ${SPRING_DOC_ENABLED:true}
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: ${SWAGGER_UI_ENABLED:true}
+    operations-sorter: alpha
+    tags-sorter: alpha
+    config-url: ${server.path}/v3/api-docs/swagger-config
+    urls:
+      - name: app-api
+        url: ${server.path}/v3/api-docs/app
+      - name: system-api
+        url: ${server.path}/v3/api-docs/system
+      - name: common
+        url: ${server.path}/v3/api-docs/common
+  group-configs:
+    - group: app
+      paths-to-match:
+        - /api/*/app/**
+    - group: system
+      paths-to-match:
+        - /api/*/system/**
+    - group: common
+      paths-to-exclude:
+        - /api/*/app/**
+        - /api/*/system/**
+
+common:
+  rest:
+    open-api:
+      servers: ${OPEN_API_SERVER:https://api.fpt-ec.click/parkx}
+  security:
+    cors:
+      allowed-origins: ${CORS_ORIGINS:http://localhost:8888}
+      allowed-methods: ${CORS_METHODS:*}
+      allowed-headers: ${CORS_HEADERS:*}
+    path-matcher:
+      permit-all-path-patterns:
+        - /webjars/swagger-ui/**
+        - /v3/api-docs/**
+        - /swagger-resources/**
+        - /webjars/**
+        - /swagger-ui/**
+        - /swagger-ui.html
+        - /null/swagger-resources/**
+        - /actuator/**
+        - /mock/**
+      ignore-authorization:
+        - /api/v1/auth/**

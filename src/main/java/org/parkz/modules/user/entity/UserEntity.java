@@ -10,34 +10,27 @@ import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@ToString
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(
         name = TableName.USER,
         indexes = {
                 @Index(name = "idx_username", columnList = "username", unique = true),
-                @Index(name = "idx_subject_id", columnList = "subjectId", unique = true),
-                @Index(name = "idx_user_phone", columnList = "phone")
+                @Index(name = "idx_user_phone", columnList = "phone", unique = true),
+                @Index(name = "idx_user_email", columnList = "email", unique = true),
         }
 )
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL, region = TableName.USER)
 public class UserEntity extends Audit<String> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(updatable = false, nullable = false)
-    private UUID id;
-
-    @Column(length = 30)
-    private String subjectId;
+    @Column(length = 30, updatable = false, nullable = false)
+    private String id;
 
     @Column(length = 50)
     private String name;
@@ -67,7 +60,6 @@ public class UserEntity extends Audit<String> {
     private String password;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupEntity.class, optional = false)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_group_id"))
     private GroupEntity group;

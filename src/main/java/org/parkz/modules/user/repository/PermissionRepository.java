@@ -1,6 +1,7 @@
 package org.parkz.modules.user.repository;
 
 import jakarta.persistence.QueryHint;
+import lombok.NonNull;
 import org.parkz.modules.user.entity.PermissionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,6 +28,7 @@ public interface PermissionRepository extends JpaRepository<PermissionEntity, St
     List<PermissionEntity> findByGroupName(@Param("groupName") String groupName);
 
     @Override
+    @NonNull
     @QueryHints(value = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<PermissionEntity> findAll();
 

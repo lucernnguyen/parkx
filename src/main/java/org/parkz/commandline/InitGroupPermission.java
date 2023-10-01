@@ -95,18 +95,40 @@ public class InitGroupPermission {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION, classes = {PermissionInitializedEvent.class})
-    public void initSuperAdminRole(PermissionInitializedEvent event) {
-        GroupEntity superAdminGroup = groupRepository.findFirstByKind(GroupKind.SUPER_ADMIN)
+    public void initSuperAdminGroup(PermissionInitializedEvent event) {
+        GroupEntity superAdminGroup = groupRepository.findFirstByKindAndDefaultGroup(GroupKind.SUPER_ADMIN, true)
                 .orElseGet(() ->
                         groupRepository.save(GroupEntity.builder()
-                                .name("Super Admin")
+                                .name("ROLE_SUPER_ADMIN")
                                 .description("Super Admin")
                                 .defaultGroup(true)
                                 .kind(GroupKind.SUPER_ADMIN)
                                 .build())
                 );
-        superAdminGroup.setPermissions(event.permissions());
+        List<PermissionEntity> permissionsSystem = event.permissions().stream()
+                .filter(p -> p.getActions().stream().anyMatch(a -> a.contains("/api/v1/system")))
+                .toList();
+        superAdminGroup.setPermissions(permissionsSystem);
         groupRepository.save(superAdminGroup);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION, classes = {PermissionInitializedEvent.class})
+    public void initUserGroup(PermissionInitializedEvent event) {
+        GroupEntity userGroup = groupRepository.findFirstByKindAndDefaultGroup(GroupKind.USER, true)
+                .orElseGet(() ->
+                        groupRepository.save(GroupEntity.builder()
+                                .name("ROLE_USER")
+                                .description("User")
+                                .defaultGroup(true)
+                                .kind(GroupKind.USER)
+                                .build())
+                );
+        List<PermissionEntity> permissionsApp = event.permissions().stream()
+                .filter(p -> p.getActions().stream().anyMatch(a -> a.contains("/api/v1/app")))
+                .toList();
+        userGroup.setPermissions(permissionsApp);
+        groupRepository.save(userGroup);
     }
 
     private String getKeyRequestMappingInfo(RequestMappingInfo info) {
