@@ -12,8 +12,7 @@ import org.parkz.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import java.util.Set;
 @Accessors(chain = true)
 @SuperBuilder(toBuilder = true)
 @ToString
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = TableName.PERMISSION)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL, region = TableName.PERMISSION)
@@ -37,12 +35,12 @@ public class PermissionEntity extends Audit<String> {
     private String name;
     @Builder.Default
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private Set<String> actions = new HashSet<>();
+    @Column(nullable = false)
+    private Set<String> actions = Collections.emptySet();
     @Builder.Default
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private Set<RequestMethod> methods = new HashSet<>();
+    @Column( nullable = false)
+    private Set<RequestMethod> methods = Collections.emptySet();
     @Builder.Default
     @Column(columnDefinition = "BOOLEAN DEFAULT true")
     private boolean showMenu = true;
@@ -53,7 +51,6 @@ public class PermissionEntity extends Audit<String> {
 
     @Builder.Default
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -63,9 +60,6 @@ public class PermissionEntity extends Audit<String> {
             targetEntity = GroupPermissionEntity.class
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<GroupPermissionEntity> groups = new ArrayList<>();
+    private List<GroupPermissionEntity> groups = Collections.emptyList();
 
-    public boolean authorize(String pathTemplate, RequestMethod method) {
-        return actions.contains(pathTemplate) && methods.contains(method);
-    }
 }

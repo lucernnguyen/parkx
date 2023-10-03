@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -16,5 +16,5 @@ import java.util.List;
 public class GroupDetails extends GroupInfo {
 
     @Builder.Default
-    private List<String> permissions = new ArrayList<>();
+    private List<String> permissions = Collections.emptyList();
 }

@@ -2,11 +2,10 @@ package org.parkz.modules.user.mapper;
 
 import org.mapstruct.*;
 import org.parkz.modules.user.entity.GroupEntity;
-import org.parkz.modules.user.factory.impl.GroupFactory;
 import org.parkz.modules.user.model.GroupDetails;
 import org.parkz.modules.user.model.GroupInfo;
 import org.springframework.fastboot.exception.InvalidException;
-import org.springframework.fastboot.rest.common.factory.data.IPersistDataFactory;
+import org.springframework.fastboot.rest.common.mapper.BaseMapper;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
@@ -15,8 +14,7 @@ import org.springframework.fastboot.rest.common.factory.data.IPersistDataFactory
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
-@DecoratedWith(GroupFactory.class)
-public interface GroupMapper extends IPersistDataFactory<GroupInfo, GroupDetails, GroupEntity> {
+public interface GroupMapper extends BaseMapper<GroupInfo, GroupDetails, GroupEntity> {
 
     @Override
     @Mapping(target = "groupPermissions", ignore = true)

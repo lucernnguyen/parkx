@@ -9,10 +9,10 @@ import org.springframework.fastboot.exception.StatusMapping;
 @RequiredArgsConstructor
 public enum GroupErrorCode implements IErrorCode {
 
-    USERS_EXISTED_IN_GROUP(1, StatusMapping.BAD_REQUEST),
-    GROUP_NAME_EXISTED(2, StatusMapping.BAD_REQUEST),
+    GROUP_HAVE_USERS_EXISTED_IN(1, StatusMapping.BAD_REQUEST),
+    GROUP_NAME_EXISTED(2, StatusMapping.CONFLICT),
     GROUP_NOT_FOUND(3, StatusMapping.NOT_FOUND),
-
+    GROUP_IS_DEFAULT(4, StatusMapping.BAD_REQUEST)
     ;
 
     private final int code;

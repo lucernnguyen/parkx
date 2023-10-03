@@ -65,11 +65,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Filt
 
     @PostConstruct
     public void postConstruct() {
-        for (var pattern : ignoreAuthorizationProperties.getPattern()) {
+        for (var pattern : ignoreAuthorizationProperties.getIgnoreAuthorization()) {
             antPathRequestMatchers.add(AntPathRequestMatcher.antMatcher(pattern));
         }
         for (var pattern : securityProperties.getPathMatcher().getPermitAllPathPatterns()) {
             antPathRequestMatchers.add(AntPathRequestMatcher.antMatcher(pattern));
+        }
+        for (var pattern : securityProperties.getApiKey()) {
+            antPathRequestMatchers.add(AntPathRequestMatcher.antMatcher(pattern.getPath()));
         }
         if (securityProperties.getPathMatcher().getPermitAllMap() == null) {
             return;
@@ -82,7 +85,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Filt
     }
 
     @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         return antPathRequestMatchers.stream()
                 .anyMatch(ant -> ant.matches(request));
     }

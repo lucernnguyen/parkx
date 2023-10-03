@@ -14,5 +14,5 @@ import java.util.List;
 public class IgnoreAuthorizationProperties {
 
     @JsonProperty("ignore-authorization")
-    private List<String> pattern = new LinkedList<>();
+    private List<String> ignoreAuthorization = new LinkedList<>();
 }

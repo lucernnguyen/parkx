@@ -17,7 +17,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 @Table(name = TableName.PERMISSION_GROUP)
 @IdClass(GroupPermissionId.class)
 public class GroupPermissionEntity implements Serializable {
@@ -34,14 +33,12 @@ public class GroupPermissionEntity implements Serializable {
     private String permissionId;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @MapsId("roleId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(insertable = false, updatable = false)
     private GroupEntity group;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @MapsId("permissionId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(insertable = false, updatable = false)

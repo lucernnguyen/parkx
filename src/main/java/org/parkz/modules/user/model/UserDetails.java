@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.parkz.modules.user.enums.Gender;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,7 +23,7 @@ public class UserDetails extends UserInfo {
     @Schema(example = "Thu Duc City, Ho Chi Minh City")
     private String address;
     @Schema(example = "2001-01-01")
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     @Schema(example = "MALE")
     private Gender gender;
     @Schema(example = "736284649274")

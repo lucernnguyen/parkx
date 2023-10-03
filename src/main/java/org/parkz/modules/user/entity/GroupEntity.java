@@ -12,7 +12,7 @@ import org.parkz.constant.TableName;
 import org.parkz.modules.user.enums.GroupKind;
 import org.springframework.fastboot.jpa.entity.Audit;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString
-@EqualsAndHashCode(callSuper = true)
 @Table(
         name = TableName.GROUP,
         indexes = {
@@ -50,13 +49,11 @@ public class GroupEntity extends Audit<String> {
 
     @Builder.Default
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "group", targetEntity = UserEntity.class)
-    private List<UserEntity> users = new ArrayList<>();
+    private List<UserEntity> users = Collections.emptyList();
 
     @Builder.Default
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -67,7 +64,7 @@ public class GroupEntity extends Audit<String> {
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    private List<GroupPermissionEntity> groupPermissions = new ArrayList<>();
+    private List<GroupPermissionEntity> groupPermissions = Collections.emptyList();
 
     public void setPermissions(List<PermissionEntity> permissions) {
         if (permissions == null) {

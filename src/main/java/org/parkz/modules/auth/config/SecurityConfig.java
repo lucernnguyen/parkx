@@ -10,7 +10,7 @@ import org.springframework.fastboot.security.properties.SecurityProperties;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class SecurityConfig extends SecurityConfigFactory {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;

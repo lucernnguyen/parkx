@@ -26,7 +26,6 @@ spring:
         reWriteBatchedInserts: true
       minimum-idle: 3
       maximum-pool-size: 20
-
     type: com.zaxxer.hikari.HikariDataSource
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -47,8 +46,7 @@ spring:
           region:
             factory_class: org.redisson.hibernate.RedissonRegionFactory
           region_prefix: HIBERNATE_2ND_CACHE
-          redisson:
-            # cache definition applied to all caches in entity region
+          redisson: # cache definition applied to all caches in entity region
             entity:
               expiration:
                 time_to_live: 600000
@@ -60,8 +58,8 @@ spring:
                 max_idle_time: 300000
     hibernate:
       ddl-auto: update
-#      ddl-auto: validate
-#      ddl-auto: create-drop
+      #    ddl-auto: validate
+      #    ddl-auto: create-drop
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
@@ -89,19 +87,6 @@ spring:
   firebase:
     config-path: ${SPRING_FIREBASE_CONFIG_PATH:path}
 
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-    enabled: ${SPRING_DOC_ENABLED:true}
-    groups:
-      enabled: true
-  swagger-ui:
-    enabled: ${SWAGGER_UI_ENABLED:true}
-    operations-sorter: alpha
-    tags-sorter: alpha
-    config-url: ${server.path}/v3/api-docs/swagger-config
-    url: ${server.path}/v3/api-docs
-
 common:
   rest:
     open-api:
@@ -122,14 +107,15 @@ common:
         - /null/swagger-resources/**
         - /actuator/**
         - /mock/**
-        - /api/v1/groups/**
-        - /api/v1/permissions/**
+      ignore-authorization:
+        - /api/v1/auth/**
     oauth2-resource-server:
       firebase:
         issuer-uri: https://securetoken.google.com/parkx-22f01
         jwk-set-uri: https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com
-    ignore-authorization:
-      - /api/v1/users/register
+    api-key:
+      - path: /api/v1/system/users/admin/create
+        key: zLp63CqnIjCN4n9z
 
 logging:
   level:
