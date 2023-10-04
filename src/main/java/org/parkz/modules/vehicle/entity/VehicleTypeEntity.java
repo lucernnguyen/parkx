@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.parkz.constant.TableName;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +21,7 @@ import org.parkz.constant.TableName;
         }
 )
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = TableName.VEHICLE_TYPE)
-public class VehicleTypeEntity {
+public class VehicleTypeEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
