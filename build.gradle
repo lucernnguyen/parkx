@@ -27,7 +27,7 @@ ext {
     /**
      * Common
      */
-    fastbootVersion = '1.0.2-SNAPSHOT'
+    fastbootVersion = '1.0.3-SNAPSHOT'
 
     /**
      * Database
