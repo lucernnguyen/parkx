@@ -1,7 +1,6 @@
 package org.parkz.modules.auth.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.parkz.modules.auth.model.request.RegisterUserRequest;
 import org.parkz.modules.user.model.UserDetails;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
@@ -15,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface IAuthController {
 
     @PostMapping("/register")
-    ResponseEntity<BaseResponse<UserDetails>> register(@Valid @RequestBody RegisterUserRequest request);
+    ResponseEntity<BaseResponse<UserDetails>> register(@RequestBody RegisterUserRequest request);
 }
