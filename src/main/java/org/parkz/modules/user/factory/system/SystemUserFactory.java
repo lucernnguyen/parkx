@@ -18,6 +18,7 @@ import org.parkz.modules.user.repository.GroupRepository;
 import org.parkz.utils.PhoneUtils;
 import org.springframework.fastboot.exception.ErrorCode;
 import org.springframework.fastboot.exception.InvalidException;
+import org.springframework.fastboot.rest.common.filter.IFilter;
 import org.springframework.fastboot.rest.common.mapper.BaseMapper;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,16 @@ public class SystemUserFactory extends UserFactory implements ISystemUserFactory
         UserEntity newAdmin = userMapper.fromUserRecordToEntity(adminRecord);
         newAdmin.setGroup(group);
         return convertToDetail(repository.save(newAdmin));
+    }
+
+    @Override
+    protected <F extends IFilter> void postDelete(String id, F filter) throws InvalidException {
+        try {
+            firebaseAuth.deleteUser(id);
+        } catch (FirebaseAuthException e) {
+            log.error("Firebase Auth Error:", e);
+            throw new InvalidException(ErrorCode.SERVER_ERROR);
+        }
     }
 
     @Override
