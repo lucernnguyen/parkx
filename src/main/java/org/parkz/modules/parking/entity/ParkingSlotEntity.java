@@ -17,7 +17,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Entity
-@Table(name = TableName.PARKING_SLOT)
+@Table(
+        name = TableName.PARKING_SLOT,
+        indexes = {
+                @Index(name = "idx_row_column", columnList = "rowIndex,columnIndex", unique = true)
+        }
+)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = TableName.PARKING_SLOT)
 public class ParkingSlotEntity extends Audit<String> {
 
@@ -29,6 +34,9 @@ public class ParkingSlotEntity extends Audit<String> {
     private String name;
     private Integer rowIndex;
     private Integer columnIndex;
+    @Builder.Default
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean filled = false;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = ParkingEntity.class, optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})

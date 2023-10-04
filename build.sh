@@ -10,4 +10,4 @@ gradle bootJar;
 
 cd "$SCRIPT_PATH"/build/libs;
 rm -rf application dependencies snapshot-dependencies spring-boot-loader
-java -Djarmode=layertools -jar onlearn-*.jar extract
+java -Djarmode=layertools -jar parkx-api-*.jar extract

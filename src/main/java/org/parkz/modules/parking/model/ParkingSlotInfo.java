@@ -16,5 +16,5 @@ public class ParkingSlotInfo implements IBaseData<UUID> {
     private String name;
     private Integer rowIndex;
     private Integer columnIndex;
-    private UUID parkingId;
+    // private UUID parkingId;
 }
