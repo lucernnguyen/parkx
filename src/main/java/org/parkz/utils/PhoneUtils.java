@@ -10,6 +10,9 @@ public class PhoneUtils {
     }
 
     public static String removePhoneNumberIdentifier(String phone) {
+        if (phone == null || phone.isEmpty()) {
+            return null;
+        }
         return phone.replaceFirst("^\\+84", "0");
     }
 }

@@ -1,8 +1,8 @@
 package org.parkz.modules.vehicle.controller.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.parkz.modules.vehicle.controller.ISystemVehicleTypeController;
-import org.parkz.modules.vehicle.factory.system.ISystemVehicleTypeFactory;
+import org.parkz.modules.vehicle.controller.IAppVehicleTypeController;
+import org.parkz.modules.vehicle.factory.app.IAppVehicleTypeFactory;
 import org.parkz.modules.vehicle.model.VehicleTypeDetails;
 import org.parkz.modules.vehicle.model.VehicleTypeInfo;
 import org.springframework.fastboot.rest.common.controller.base.BaseController;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class SystemVehicleTypeController
+public class AppVehicleTypeController
         extends BaseController<Integer, VehicleTypeInfo, VehicleTypeDetails>
-        implements ISystemVehicleTypeController {
+        implements IAppVehicleTypeController {
 
-    private final ISystemVehicleTypeFactory vehicleFactory;
+    private final IAppVehicleTypeFactory appVehicleTypeFactory;
 
     @Override
     protected IDataFactory<Integer, VehicleTypeInfo, VehicleTypeDetails> getDataFactory() {
-        return vehicleFactory;
+        return appVehicleTypeFactory;
     }
 }

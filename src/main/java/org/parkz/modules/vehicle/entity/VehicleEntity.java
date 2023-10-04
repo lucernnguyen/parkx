@@ -47,4 +47,9 @@ public class VehicleEntity extends Audit<String> {
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = UserEntity.class, optional = false)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_vehicle_user_id"))
     private UserEntity user;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = VehicleTypeEntity.class, optional = false)
+    @JoinColumn(name = "vehicle_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_vehicle_vehicle_type_id"))
+    private VehicleTypeEntity vehicleType;
 }
