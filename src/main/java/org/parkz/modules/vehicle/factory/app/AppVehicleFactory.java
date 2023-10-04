@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AppVehicleFactory extends VehicleFactory {
+public class AppVehicleFactory extends VehicleFactory implements IAppVehicleFactory {
 
     private final UserRepository userRepository;
 
