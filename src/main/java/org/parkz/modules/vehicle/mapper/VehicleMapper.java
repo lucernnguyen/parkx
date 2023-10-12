@@ -23,16 +23,6 @@ public abstract class VehicleMapper implements BaseMapper<VehicleInfo, VehicleIn
 
     @Override
     @Mapping(target = "userId", expression = "java(JwtUtils.getUserIdString())")
-    @Mapping(target = "vehicleType", source = "vehicleTypeId", qualifiedByName = "fromVehicleTypeIdToEntityMapper")
     public abstract VehicleEntity createConvertToEntity(VehicleInfo detail) throws InvalidException;
-
-    @Override
-    @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "vehicleType", source = "vehicleTypeId", qualifiedByName = "fromVehicleTypeIdToEntityMapper")
-    public abstract void updateConvertToEntity(@MappingTarget VehicleEntity entity, VehicleInfo detail) throws InvalidException;
-
-    @Override
-    @Mapping(target = "vehicleTypeId", source = "vehicleType.id")
-    public abstract VehicleInfo convertToInfo(VehicleEntity entity) throws InvalidException;
 
 }

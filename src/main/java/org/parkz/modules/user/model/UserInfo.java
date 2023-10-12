@@ -1,12 +1,18 @@
 package org.parkz.modules.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import org.springframework.fastboot.rest.common.model.BaseData;
+import org.springframework.fastboot.rest.common.model.IBaseData;
+import org.springframework.fastboot.rest.serializer.json.View;
 
 import java.util.UUID;
 
@@ -14,10 +20,11 @@ import java.util.UUID;
 @Setter
 @ToString
 @SuperBuilder(toBuilder = true)
-@EqualsAndHashCode(callSuper = true)
 @Jacksonized
-public class UserInfo extends BaseData<String> {
+public class UserInfo implements IBaseData<String> {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String id;
     @NotBlank
     @Size(min = 1, max = 50)
     @Schema(example = "Nguyễn Văn A")
@@ -35,6 +42,7 @@ public class UserInfo extends BaseData<String> {
     @Schema(example = "true")
     @Builder.Default
     private boolean active = true;
+    @JsonView({View.Include.Create.class, View.Exclude.Update.class})
     private String username;
     private UUID groupId;
 }
