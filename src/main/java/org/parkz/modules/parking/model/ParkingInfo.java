@@ -1,5 +1,6 @@
 package org.parkz.modules.parking.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Jacksonized
 public class ParkingInfo implements IBaseData<UUID> {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID id;
     @Schema(example = "Bãi giữ xe FPT")
     private String name;

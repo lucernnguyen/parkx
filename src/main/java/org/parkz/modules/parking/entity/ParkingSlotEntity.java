@@ -37,10 +37,12 @@ public class ParkingSlotEntity extends Audit<String> {
     @Builder.Default
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean filled = false;
+    @Column(name = "parking_id", nullable = false)
+    private UUID parkingId;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = ParkingEntity.class, optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "parking_id", nullable = false, foreignKey = @ForeignKey(name = "fk_parking_slot_parking_id"))
+    @JoinColumn(name = "parking_id", foreignKey = @ForeignKey(name = "fk_parking_slot_parking_id"), insertable = false, updatable = false)
     private ParkingEntity parking;
 }

@@ -23,7 +23,7 @@ public abstract class ParkingSlotMapper implements BaseMapper<ParkingSlotInfo, P
     protected ParkingMapper parkingMapper;
 
     @Override
-    @Mapping(target = "parking", expression = "java(parkingMapper.fromParkingIdToParkingEntity())")
+    @Mapping(target = "parkingId", expression = "java(parkingMapper.fromParkingIdToParkingEntity().getId())")
     public abstract ParkingSlotEntity createConvertToEntity(ParkingSlotInfo detail) throws InvalidException;
 
 }
