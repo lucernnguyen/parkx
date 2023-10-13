@@ -48,6 +48,9 @@ public class VehicleEntity extends Audit<String> {
     private Integer vehicleTypeId;
     @Column(name = "user_id", nullable = false)
     private String userId;
+    @Builder.Default
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean checkin = false;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = VehicleTypeEntity.class, optional = false)
