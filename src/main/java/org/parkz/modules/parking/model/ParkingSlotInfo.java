@@ -2,6 +2,7 @@ package org.parkz.modules.parking.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -20,6 +21,8 @@ public class ParkingSlotInfo implements IBaseData<UUID> {
     private String name;
     private Integer rowIndex;
     private Integer columnIndex;
+    @Builder.Default
+    private boolean hasParking = false;
     @JsonView({View.Include.Create.class, View.Exclude.Update.class})
     private UUID parkingId;
 }

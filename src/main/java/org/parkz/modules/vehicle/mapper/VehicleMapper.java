@@ -25,4 +25,7 @@ public abstract class VehicleMapper implements BaseMapper<VehicleInfo, VehicleIn
     @Mapping(target = "userId", expression = "java(JwtUtils.getUserIdString())")
     public abstract VehicleEntity createConvertToEntity(VehicleInfo detail) throws InvalidException;
 
+    @Override
+    @Mapping(target = "vehicleTypeName", source = "vehicleType.name")
+    public abstract VehicleInfo convertToDetail(VehicleEntity entity) throws InvalidException;
 }

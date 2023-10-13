@@ -39,6 +39,9 @@ public class ParkingSlotEntity extends Audit<String> {
     private boolean filled = false;
     @Column(name = "parking_id", nullable = false)
     private UUID parkingId;
+    @Builder.Default
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean hasParking = false;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = ParkingEntity.class, optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
