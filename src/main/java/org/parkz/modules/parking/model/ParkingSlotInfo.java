@@ -1,6 +1,5 @@
 package org.parkz.modules.parking.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.UUID;
 @Jacksonized
 public class ParkingSlotInfo implements IBaseData<UUID> {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Include.Update.class})
     private UUID id;
     private String name;
     private Integer rowIndex;

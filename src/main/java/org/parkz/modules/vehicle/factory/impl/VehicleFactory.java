@@ -24,12 +24,12 @@ public class VehicleFactory
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, value = VehicleCheckInEvent.class)
     protected void vehicleCheckInListener(VehicleCheckInEvent event) {
-        setStatusVehicle(event.parkingSlotId(), true);
+        setStatusVehicle(event.vehicleId(), true);
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, value = VehicleCheckOutEvent.class)
     protected void vehicleCheckoutListener(VehicleCheckOutEvent event) {
-        setStatusVehicle(event.parkingSlotId(), false);
+        setStatusVehicle(event.vehicleId(), false);
     }
 
     private void setStatusVehicle(UUID id, boolean checkIn) {

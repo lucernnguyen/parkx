@@ -12,6 +12,7 @@ import org.parkz.modules.parking.entity.ParkingSlotEntity;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.vehicle.entity.VehicleEntity;
 import org.parkz.modules.vehicle.model.VehicleInfo;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,8 +31,12 @@ public class ParkingSessionEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
     private UUID id;
+    @CreatedDate
     @CreationTimestamp(source = SourceType.DB)
     @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdDate;
+    @Column(insertable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime checkInTime;
     @Temporal(TemporalType.TIMESTAMP)

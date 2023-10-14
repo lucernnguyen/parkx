@@ -26,8 +26,8 @@ public abstract class ParkingSessionMapper implements BaseMapper<ParkingSessionI
     public abstract ParkingSessionEntity createConvertToEntity(ParkingSessionInfo detail) throws InvalidException;
 
     @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "checkInTime", expression = "java(LocalDateTime.now())")
     @Mapping(target = "vehicleId", source = "request.vehicleId")
+    @Mapping(target = "parkingSlotId", source = "request.parkingSlotId", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "vehicleSnapShot", source = "vehicleInfo")
     @Mapping(target = "parkingSlotSnapShot", source = "parkingSlotInfo")
     public abstract ParkingSessionEntity createConvertToEntity(CreateParkingSessionRequest request, VehicleInfo vehicleInfo, ParkingSlotInfo parkingSlotInfo);

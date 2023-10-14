@@ -2,8 +2,8 @@ package org.parkz.modules.parking.mapper;
 
 import lombok.Setter;
 import org.mapstruct.*;
-import org.parkz.modules.parking.enums.ParkingErrorCode;
 import org.parkz.modules.parking.entity.ParkingEntity;
+import org.parkz.modules.parking.enums.ParkingErrorCode;
 import org.parkz.modules.parking.model.ParkingInfo;
 import org.parkz.modules.parking.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;

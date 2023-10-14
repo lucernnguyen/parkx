@@ -9,7 +9,8 @@ import org.springframework.fastboot.exception.StatusMapping;
 @RequiredArgsConstructor
 public enum ParkingSlotErrorCode implements IErrorCode {
 
-    PARKING_SLOT_POSITION_ALREADY_EXISTS(1, StatusMapping.ALREADY_EXISTS)
+    PARKING_SLOT_NOT_FOUND(1, StatusMapping.NOT_FOUND),
+    PARKING_SLOT_POSITION_ALREADY_EXISTS(2, StatusMapping.ALREADY_EXISTS)
     ;
 
     private final int code;
