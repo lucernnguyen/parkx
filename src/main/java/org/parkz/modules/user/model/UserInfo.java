@@ -1,6 +1,5 @@
 package org.parkz.modules.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @Jacksonized
 public class UserInfo implements IBaseData<String> {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Include.Update.class})
     private String id;
     @NotBlank
     @Size(min = 1, max = 50)

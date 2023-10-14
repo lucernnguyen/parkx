@@ -23,6 +23,9 @@ public class SystemParkingSlotFactory extends ParkingSlotFactory implements ISys
 
     @Override
     protected ParkingSlotInfo preUpdate(UUID id, ParkingSlotInfo detail) throws InvalidException {
+        if (id == null) {
+            throw new InvalidException(notFound());
+        }
         if (repository.existsByRowIndexAndColumnIndexAndIdNot(detail.getRowIndex(), detail.getColumnIndex(), id)) {
             throw new InvalidException(ParkingSlotErrorCode.PARKING_SLOT_POSITION_ALREADY_EXISTS);
         }

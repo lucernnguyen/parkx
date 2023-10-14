@@ -21,7 +21,7 @@ import java.util.UUID;
 @JsonView(View.Details.class)
 public class VehicleInfo implements IBaseData<UUID> {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Include.Update.class})
     private UUID id;
     @NotBlank
     @Schema(example = "Wave Tàu")
@@ -33,12 +33,14 @@ public class VehicleInfo implements IBaseData<UUID> {
     @Schema(example = "Đen")
     private String color;
     @Builder.Default
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean checkin = false;
     @Builder.Default
     @Schema(example = "[\"https://congthuong-cdn.mastercms.vn/stores/news_dataimages/2023/072023/27/17/xe-may-sh20230727173628.jpg\"]")
     private List<String> images = Collections.emptyList();
     @JsonView({View.Include.Create.class, View.Exclude.Update.class})
     private Integer vehicleTypeId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String vehicleTypeName;
 
 }

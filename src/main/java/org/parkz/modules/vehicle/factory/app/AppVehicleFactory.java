@@ -24,7 +24,7 @@ public class AppVehicleFactory extends VehicleFactory implements IAppVehicleFact
         if (repository.existsByLicensePlate(detail.getLicensePlate())) {
             throw new InvalidException(VehicleErrorCode.VEHICLE_LICENSE_PLATE_ALREADY_EXISTS);
         }
-        if (!vehicleTypeRepository.existsById(detail.getVehicleTypeId())) {
+        if (detail.getVehicleTypeId() == null || !vehicleTypeRepository.existsById(detail.getVehicleTypeId())) {
             throw new InvalidException(VehicleTypeErrorCode.VEHICLE_TYPE_NOT_FOUND);
         }
         return detail;

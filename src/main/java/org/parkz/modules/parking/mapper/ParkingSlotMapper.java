@@ -2,10 +2,8 @@ package org.parkz.modules.parking.mapper;
 
 import lombok.Setter;
 import org.mapstruct.*;
-import org.parkz.modules.parking.entity.ParkingEntity;
 import org.parkz.modules.parking.entity.ParkingSlotEntity;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
-import org.parkz.modules.parking.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.fastboot.exception.InvalidException;
 import org.springframework.fastboot.rest.common.mapper.BaseMapper;

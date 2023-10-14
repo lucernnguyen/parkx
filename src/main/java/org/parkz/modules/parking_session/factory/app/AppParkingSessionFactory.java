@@ -2,8 +2,8 @@ package org.parkz.modules.parking_session.factory.app;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.parkz.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.event.parking_session.VehicleCheckInEvent;
+import org.parkz.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.modules.parking.factory.IParkingSlotFactory;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;
@@ -66,6 +66,7 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
         if (parkingSession.getParkingSlot() != null) {
             parkingSession.getParkingSlot().setHasParking(true);
         }
+        parkingSession.setCheckInTime(LocalDateTime.now());
         repository.save(parkingSession);
         applicationEventPublisher.publishEvent(new VehicleCheckInEvent(parkingSession.getVehicleId(), parkingSession.getParkingSlotId()));
         return SuccessResponse.status(true);

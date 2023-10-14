@@ -1,6 +1,5 @@
 package org.parkz.modules.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +19,7 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 public class GroupInfo implements IBaseData<UUID> {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Include.Update.class})
     private UUID id;
     @NotBlank
     @Size(min = 1, max = 50)
