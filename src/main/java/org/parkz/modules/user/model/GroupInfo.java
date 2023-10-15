@@ -17,6 +17,7 @@ import java.util.UUID;
 @Data
 @Jacksonized
 @SuperBuilder(toBuilder = true)
+@JsonView(View.ExtendedDetails.class)
 public class GroupInfo implements IBaseData<UUID> {
 
     @JsonView({View.Exclude.Create.class, View.Include.Update.class})

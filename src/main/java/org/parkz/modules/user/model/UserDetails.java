@@ -1,23 +1,20 @@
 package org.parkz.modules.user.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.parkz.modules.user.enums.Gender;
+import org.springframework.fastboot.rest.serializer.json.View;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
+@Data
 @SuperBuilder(toBuilder = true)
-@EqualsAndHashCode(callSuper = true)
 @Jacksonized
+@JsonView(View.ExtendedDetails.class)
 public class UserDetails extends UserInfo {
 
     @Schema(example = "Thu Duc City, Ho Chi Minh City")
@@ -32,4 +29,5 @@ public class UserDetails extends UserInfo {
     private LocalDateTime idCardIssuedDate;
     @Schema(example = "Police")
     private String idCardIssuedBy;
+
 }

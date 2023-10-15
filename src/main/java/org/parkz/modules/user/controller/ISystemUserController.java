@@ -7,11 +7,10 @@ import jakarta.validation.Valid;
 import org.parkz.modules.user.model.UserDetails;
 import org.parkz.modules.user.model.UserInfo;
 import org.parkz.modules.user.model.request.GetUserInfoFilterRequest;
-import org.springframework.fastboot.rest.common.controller.IDeleteModelByIdController;
-import org.springframework.fastboot.rest.common.controller.IGetDetailByIdController;
-import org.springframework.fastboot.rest.common.controller.IGetInfoListWithFilterController;
-import org.springframework.fastboot.rest.common.controller.IUpdateModelController;
+import org.springframework.fastboot.rest.common.controller.*;
 import org.springframework.fastboot.rest.common.controller.transactional.ICreateModelTransactionalController;
+import org.springframework.fastboot.rest.common.controller.transactional.IDeleteModelByIdTransactionalController;
+import org.springframework.fastboot.rest.common.controller.transactional.IUpdateModelTransactionalController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/v1/system/users")
 public interface ISystemUserController extends
         ICreateModelTransactionalController<String, UserDetails>,
-        IGetInfoListWithFilterController<String, UserInfo, GetUserInfoFilterRequest>,
+        IGetInfoPageController<String, UserInfo, GetUserInfoFilterRequest>,
         IGetDetailByIdController<String, UserDetails>,
-        IUpdateModelController<String, UserDetails>,
-        IDeleteModelByIdController<String> {
+        IUpdateModelTransactionalController<String, UserDetails>,
+        IDeleteModelByIdTransactionalController<String> {
 
     @GetMapping("/details")
     ResponseEntity<BaseResponse<UserDetails>> userDetails();
