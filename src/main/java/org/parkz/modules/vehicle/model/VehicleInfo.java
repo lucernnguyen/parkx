@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
+import org.parkz.modules.parking_session.model.ParkingSessionInfo;
 import org.springframework.fastboot.rest.common.model.IBaseData;
 import org.springframework.fastboot.rest.serializer.json.View;
 
@@ -42,5 +43,7 @@ public class VehicleInfo implements IBaseData<UUID> {
     private Integer vehicleTypeId;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String vehicleTypeName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private ParkingSessionInfo parkingSessionActive;
 
 }

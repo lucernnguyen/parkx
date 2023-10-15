@@ -85,6 +85,8 @@ spring:
           default:
             connectTimeout: 5000
             readTimeout: 10000
+          firebase-client:
+            url:
   firebase:
     config-path: ${SPRING_FIREBASE_CONFIG_PATH:path}
 

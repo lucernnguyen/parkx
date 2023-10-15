@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.parkz.modules.parking_session.model.ParkingSessionInfo;
+import org.parkz.modules.parking_session.model.filter.AppParkingSessionFilter;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
+import org.springframework.fastboot.rest.common.controller.IGetInfoListWithFilterController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,8 @@ import java.util.UUID;
 
 @Tag(name = "App Parking Session Controller")
 @RequestMapping("/api/v1/app/parkingSession")
-public interface IAppParkingSessionController {
+public interface IAppParkingSessionController extends
+        IGetInfoListWithFilterController<UUID, ParkingSessionInfo, AppParkingSessionFilter> {
 
     @PostMapping("/checkIn")
     @Operation(
