@@ -4,6 +4,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldNameConstants
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = TableName.PARKING_SESSION)

@@ -12,6 +12,7 @@ import org.parkz.constant.TableName;
 import org.parkz.modules.user.enums.GroupKind;
 import org.springframework.fastboot.jpa.entity.Audit;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +65,7 @@ public class GroupEntity extends Audit<String> {
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    private List<GroupPermissionEntity> groupPermissions = Collections.emptyList();
+    private List<GroupPermissionEntity> groupPermissions = new ArrayList<>();
 
     public void setPermissions(List<PermissionEntity> permissions) {
         if (permissions == null) {
