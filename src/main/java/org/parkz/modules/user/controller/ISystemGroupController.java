@@ -4,11 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.parkz.modules.user.model.GroupDetails;
 import org.parkz.modules.user.model.GroupInfo;
 import org.parkz.modules.user.model.request.GetGroupInfoFilterRequest;
-import org.springframework.fastboot.rest.common.controller.IDeleteModelByIdController;
-import org.springframework.fastboot.rest.common.controller.transactional.ICreateModelTransactionalController;
-import org.springframework.fastboot.rest.common.controller.transactional.IGetInfoByIdTransactionalController;
-import org.springframework.fastboot.rest.common.controller.transactional.IGetInfoPageTransactionalController;
-import org.springframework.fastboot.rest.common.controller.transactional.IUpdateModelTransactionalController;
+import org.springframework.fastboot.rest.common.controller.transactional.*;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +21,7 @@ public interface ISystemGroupController extends
         IGetInfoPageTransactionalController<UUID, GroupInfo, GetGroupInfoFilterRequest>,
         IGetInfoByIdTransactionalController<UUID, GroupInfo>,
         IUpdateModelTransactionalController<UUID, GroupDetails>,
-        IDeleteModelByIdController<UUID> {
+        IDeleteModelByIdTransactionalController<UUID> {
 
     @PatchMapping("/{id}/default")
     ResponseEntity<BaseResponse<SuccessResponse>> changeDefaultGroup(@PathVariable("id") UUID id);

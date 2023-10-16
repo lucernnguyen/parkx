@@ -11,6 +11,8 @@ public enum UserErrorCode implements IErrorCode {
 
     USER_NOT_FOUND(1, StatusMapping.NOT_FOUND),
     FIREBASE_NOT_FOUND(2, StatusMapping.NOT_FOUND),
+    USER_PHONE_ALREADY_EXISTS(3, StatusMapping.ALREADY_EXISTS),
+    USER_EMAIL_ALREADY_EXISTS(4, StatusMapping.ALREADY_EXISTS),
 
     ;
 

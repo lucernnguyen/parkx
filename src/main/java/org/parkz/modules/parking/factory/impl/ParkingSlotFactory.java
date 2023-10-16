@@ -1,8 +1,8 @@
 package org.parkz.modules.parking.factory.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.parkz.event.parking_session.VehicleCheckInEvent;
-import org.parkz.event.parking_session.VehicleCheckOutEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckInEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.modules.parking.entity.ParkingSlotEntity;
 import org.parkz.modules.parking.enums.ParkingSlotErrorCode;
 import org.parkz.modules.parking.factory.IParkingSlotFactory;

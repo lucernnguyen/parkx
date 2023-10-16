@@ -2,7 +2,7 @@ package org.parkz.commandline;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.parkz.event.user.PermissionInitializedEvent;
+import org.parkz.shared.event.user.PermissionInitializedEvent;
 import org.parkz.modules.user.entity.GroupEntity;
 import org.parkz.modules.user.entity.PermissionEntity;
 import org.parkz.modules.user.enums.GroupKind;

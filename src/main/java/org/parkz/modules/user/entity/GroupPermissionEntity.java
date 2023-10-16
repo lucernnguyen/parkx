@@ -3,7 +3,7 @@ package org.parkz.modules.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.parkz.modules.user.entity.composite.GroupPermissionId;
 
 import java.io.Serial;

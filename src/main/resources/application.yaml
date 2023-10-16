@@ -89,6 +89,19 @@ spring:
             url:
   firebase:
     config-path: ${SPRING_FIREBASE_CONFIG_PATH:path}
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
+    from: ${MAIL_FROM:mail.from}
+    properties:
+      mail.smtp:
+        starttls.enable: 'true'
+        auth: 'true'
+  thymeleaf:
+    check-template-location: false
+    check-template: false
 
 common:
   rest:
@@ -123,4 +136,5 @@ common:
 
 logging:
   level:
+    #    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
     org.springframework.fastboot.security.interceptor: off

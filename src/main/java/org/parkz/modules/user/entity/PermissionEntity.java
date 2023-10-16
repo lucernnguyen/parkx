@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 import org.springframework.web.bind.annotation.RequestMethod;
 

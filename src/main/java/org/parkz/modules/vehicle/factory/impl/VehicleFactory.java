@@ -1,8 +1,8 @@
 package org.parkz.modules.vehicle.factory.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.parkz.event.parking_session.VehicleCheckInEvent;
-import org.parkz.event.parking_session.VehicleCheckOutEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckInEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.modules.vehicle.entity.VehicleEntity;
 import org.parkz.modules.vehicle.enums.VehicleErrorCode;
 import org.parkz.modules.vehicle.factory.IVehicleFactory;

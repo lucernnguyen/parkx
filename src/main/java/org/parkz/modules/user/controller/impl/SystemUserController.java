@@ -6,6 +6,8 @@ import org.parkz.modules.user.factory.system.ISystemUserFactory;
 import org.parkz.modules.user.model.UserDetails;
 import org.parkz.modules.user.model.UserInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.fastboot.logging.LogType;
+import org.springframework.fastboot.logging.Logging;
 import org.springframework.fastboot.rest.common.controller.base.BaseController;
 import org.springframework.fastboot.rest.common.factory.data.IDataFactory;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Logging(request = LogType.REQUEST)
 public class SystemUserController
         extends BaseController<String, UserInfo, UserDetails>
         implements ISystemUserController {

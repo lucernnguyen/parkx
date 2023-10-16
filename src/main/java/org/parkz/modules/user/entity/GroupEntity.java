@@ -8,7 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.parkz.modules.user.enums.GroupKind;
 import org.springframework.fastboot.jpa.entity.Audit;
 

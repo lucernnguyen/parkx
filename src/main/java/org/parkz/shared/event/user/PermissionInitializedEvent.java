@@ -1,4 +1,4 @@
-package org.parkz.event.user;
+package org.parkz.shared.event.user;
 
 import org.parkz.modules.user.entity.PermissionEntity;
 

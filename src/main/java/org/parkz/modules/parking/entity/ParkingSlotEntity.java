@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.util.UUID;

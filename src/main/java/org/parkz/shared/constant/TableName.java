@@ -1,4 +1,4 @@
-package org.parkz.constant;
+package org.parkz.shared.constant;
 
 import lombok.experimental.UtilityClass;
 

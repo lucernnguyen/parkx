@@ -2,19 +2,22 @@ package org.parkz.modules.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.parkz.modules.user.enums.Gender;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldNameConstants
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(
@@ -58,9 +61,11 @@ public class UserEntity extends Audit<String> {
     @Column(length = 32)
     private String username;
     private String password;
+    @Column(name = "group_id", nullable = false)
+    private UUID groupId;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupEntity.class, optional = false)
-    @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_group_id"))
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "fk_user_group_id"), insertable = false, updatable = false)
     private GroupEntity group;
 }
