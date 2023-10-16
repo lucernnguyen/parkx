@@ -2,8 +2,8 @@ package org.parkz.modules.parking_session.factory.app;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.parkz.event.parking_session.VehicleCheckInEvent;
-import org.parkz.event.parking_session.VehicleCheckOutEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckInEvent;
+import org.parkz.shared.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.modules.parking.factory.IParkingSlotFactory;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;

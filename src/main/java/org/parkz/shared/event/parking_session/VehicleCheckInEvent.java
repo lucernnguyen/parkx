@@ -1,4 +1,4 @@
-package org.parkz.event.parking_session;
+package org.parkz.shared.event.parking_session;
 
 import java.util.UUID;
 

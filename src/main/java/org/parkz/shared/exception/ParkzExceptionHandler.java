@@ -1,4 +1,4 @@
-package org.parkz.exception;
+package org.parkz.shared.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;

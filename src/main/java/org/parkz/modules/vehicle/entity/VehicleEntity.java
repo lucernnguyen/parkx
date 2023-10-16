@@ -8,7 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
-import org.parkz.constant.TableName;
+import org.parkz.shared.constant.TableName;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;
 import org.parkz.modules.user.entity.UserEntity;
 import org.springframework.fastboot.jpa.entity.Audit;

@@ -99,6 +99,9 @@ spring:
       mail.smtp:
         starttls.enable: 'true'
         auth: 'true'
+  thymeleaf:
+    check-template-location: false
+    check-template: false
 
 common:
   rest:

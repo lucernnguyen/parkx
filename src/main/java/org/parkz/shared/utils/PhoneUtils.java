@@ -1,4 +1,4 @@
-package org.parkz.utils;
+package org.parkz.shared.utils;
 
 import lombok.experimental.UtilityClass;
 
