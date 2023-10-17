@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.parkz.modules.parking_session.model.ParkingSessionInfo;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @Jacksonized
 @JsonView(View.Details.class)
+@NoArgsConstructor
 public class VehicleInfo implements IBaseData<UUID> {
 
     @JsonView({View.Exclude.Create.class, View.Include.Update.class})

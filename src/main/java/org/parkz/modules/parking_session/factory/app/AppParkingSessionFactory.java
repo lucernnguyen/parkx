@@ -2,6 +2,8 @@ package org.parkz.modules.parking_session.factory.app;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.parkz.modules.parking_session.entity.redis.ParkingSessionRedisEntity;
+import org.parkz.modules.parking_session.repository.redis.ParkingSessionRedisRepository;
 import org.parkz.shared.event.parking_session.VehicleCheckInEvent;
 import org.parkz.shared.event.parking_session.VehicleCheckOutEvent;
 import org.parkz.modules.parking.factory.IParkingSlotFactory;
@@ -37,6 +39,7 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
     @Qualifier("parkingSlotFactory")
     private final IParkingSlotFactory parkingSlotFactory;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final ParkingSessionRedisRepository parkingSessionRedisRepository;
 
     @Override
     @Transactional
@@ -46,29 +49,28 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
         }
         VehicleInfo vehicleInfo = vehicleFactory.getDetailModel(request.getVehicleId(), null);
         ParkingSlotInfo parkingSlotInfo = parkingSlotFactory.getParkingSlotNullable(request.getParkingSlotId());
-        ParkingSessionEntity parkingSession = parkingSessionMapper.createConvertToEntity(request, vehicleInfo, parkingSlotInfo);
-        //TODO: save redis
-        parkingSession = repository.save(parkingSession);
-        return convertToDetail(parkingSession);
+        ParkingSessionRedisEntity parkingSessionRedis = parkingSessionMapper.createConvertToRedisEntity(request, vehicleInfo, parkingSlotInfo);
+        parkingSessionRedis = parkingSessionRedisRepository.save(parkingSessionRedis);
+        return parkingSessionMapper.convertToDetail(parkingSessionRedis);
     }
 
     @Override
     public ParkingSessionInfo getSessionInfo(UUID sessionId) throws InvalidException {
-        ParkingSessionEntity parkingSession = findByIdNotNull(sessionId);
-        return convertToDetail(parkingSession);
+        ParkingSessionRedisEntity parkingSession = parkingSessionRedisRepository.findById(sessionId)
+                .orElseThrow(() -> new InvalidException(notFound()));
+        return parkingSessionMapper.convertToDetail(parkingSession);
     }
 
     @Override
     public SuccessResponse confirmCheckIn(ConfirmCheckInRequest request) throws InvalidException {
-        ParkingSessionEntity parkingSession = findByIdNotNull(request.getSessionId());
+        ParkingSessionRedisEntity parkingSessionRedis = parkingSessionRedisRepository.findById(request.getSessionId())
+                .orElseThrow(() -> new InvalidException(notFound()));
+        ParkingSessionEntity parkingSession = parkingSessionMapper.createConvertToEntity(parkingSessionRedis);
         parkingSession.setConfirmed(true);
-        parkingSession.getVehicle().setCheckin(true);
-        if (parkingSession.getParkingSlot() != null) {
-            parkingSession.getParkingSlot().setHasParking(true);
-        }
         parkingSession.setCheckInTime(LocalDateTime.now());
         repository.save(parkingSession);
         applicationEventPublisher.publishEvent(new VehicleCheckInEvent(parkingSession.getVehicleId(), parkingSession.getParkingSlotId()));
+        parkingSessionRedisRepository.deleteById(parkingSessionRedis.getId());
         return SuccessResponse.status(true);
     }
 

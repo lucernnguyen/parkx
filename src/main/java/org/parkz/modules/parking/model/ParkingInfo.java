@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.springframework.fastboot.rest.common.model.IBaseData;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Data
 @SuperBuilder
 @Jacksonized
+@NoArgsConstructor
 public class ParkingInfo implements IBaseData<UUID> {
 
     @JsonView({View.Exclude.Create.class, View.Include.Update.class})

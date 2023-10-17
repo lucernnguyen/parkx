@@ -5,14 +5,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
-import org.parkz.shared.constant.TableName;
 import org.parkz.modules.parking.entity.ParkingSlotEntity;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.vehicle.entity.VehicleEntity;
 import org.parkz.modules.vehicle.model.VehicleInfo;
+import org.parkz.shared.constant.TableName;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -23,8 +22,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-@SuperBuilder(toBuilder = true)
 @Entity
+@Builder
 @Table(name = TableName.PARKING_SESSION)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = TableName.PARKING_SESSION)
 public class ParkingSessionEntity {
@@ -38,7 +37,7 @@ public class ParkingSessionEntity {
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdDate;
-    @Column(insertable = false)
+    @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime checkInTime;
     @Temporal(TemporalType.TIMESTAMP)
