@@ -34,7 +34,7 @@ common:
       servers: ${OPEN_API_SERVER:https://api.fpt-ec.click/parkx}
   security:
     cors:
-      allowed-origins: ${CORS_ORIGINS:http://localhost:8888}
+      allowed-origins: ${CORS_ORIGINS:http://localhost:8000}
       allowed-methods: ${CORS_METHODS:*}
       allowed-headers: ${CORS_HEADERS:*}
     path-matcher:
