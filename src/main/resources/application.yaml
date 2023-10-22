@@ -81,8 +81,14 @@ spring:
           default:
             connectTimeout: 5000
             readTimeout: 10000
-          firebase-client:
-            url:
+            logger-level: full
+          paypal:
+            url: ${SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_PAYPAL_URL:https://api-m.sandbox.paypal.com}
+            logger-level: full
+          currency:
+            url: ${SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_CURRENCY_URL:https://open.er-api.com}
+            logger-level: full
+
   firebase:
     config-path: ${SPRING_FIREBASE_CONFIG_PATH:path}
   mail:
@@ -132,5 +138,13 @@ common:
 
 logging:
   level:
-    #    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+#    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
     org.springframework.fastboot.security.interceptor: off
+    org.parkz.infrastructure.client: debug
+
+
+paypal:
+  app-name: ${PAYPAL_APP_NAME:parkx-local}
+  client-id: ${PAYPAL_CLIENT_ID:AcsOD22Hu8gEJTzaw-VkYmzcbZ4sGE-KTl1q6nhR2R4zn0VU8JcT1NfzEp3S9-31BEPoUWu2PXkoEWYH}
+  secret-key: ${PAYPAL_SECRET_KEY:EM-5YL4AsRjxTW5P6S96uzsbw-Fb5b2t2OXaZudzt5ZkSU8XbVkRXh1Slia9predd589OA-fh8w69Cg7}
+  deposit-url: ${PAYPAL_DEPOSIT_URL:http://localhost:8080/api/v1/app/wallet/public/deposit}

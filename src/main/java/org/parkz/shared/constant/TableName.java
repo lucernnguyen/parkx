@@ -16,5 +16,7 @@ public final class TableName {
     public static final String PARKING = PREFIX + "parking";
     public static final String PARKING_SLOT = PREFIX + "parking_slot";
     public static final String PARKING_SESSION = PREFIX + "parking_session";
+    public static final String WALLET = PREFIX + "wallet";
+    public static final String TRANSACTION = PREFIX + "transaction";
 
 }

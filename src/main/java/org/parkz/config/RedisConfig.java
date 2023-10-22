@@ -6,7 +6,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration(proxyBeanMethods = false)
 @EnableRedisRepositories(
         basePackages = {
-                "org.parkz.modules.*.repository.redis"
+                "org.parkz.modules.*.repository.redis",
+                "org.parkz.cache.repository"
         }
 )
 public class RedisConfig {
