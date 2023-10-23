@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.parkz.modules.wallet.enums.TransactionStatus;
+import org.parkz.modules.wallet.enums.TransactionType;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -27,6 +29,8 @@ public class TransactionRedisEntity {
     private BigDecimal balance;
     private BigDecimal amount;
     private TransactionStatus status;
+    private TransactionType transactionType;
+    @Indexed
     private String refTransactionId;
     private UUID walletId;
     private String userId;

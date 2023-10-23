@@ -5,8 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.parkz.shared.constant.TableName;
 import org.parkz.modules.user.enums.Gender;
+import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.time.LocalDate;

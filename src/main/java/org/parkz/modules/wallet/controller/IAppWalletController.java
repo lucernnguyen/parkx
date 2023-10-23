@@ -1,15 +1,14 @@
 package org.parkz.modules.wallet.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.parkz.modules.wallet.model.WalletInfo;
 import org.parkz.modules.wallet.model.request.DepositRequest;
 import org.parkz.modules.wallet.model.request.InquiryRequest;
 import org.parkz.modules.wallet.model.response.InquiryResponse;
 import org.springframework.fastboot.rest.common.controller.IGetDetailByContextController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
-import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,5 +25,5 @@ public interface IAppWalletController extends IGetDetailByContextController<UUID
     ResponseEntity<BaseResponse<InquiryResponse>> inquiry(@Valid @RequestBody InquiryRequest request);
 
     @GetMapping("/public/deposit")
-    ResponseEntity<BaseResponse<SuccessResponse>> deposit(@Valid DepositRequest request);
+    void deposit(@Valid DepositRequest request, HttpServletResponse response);
 }

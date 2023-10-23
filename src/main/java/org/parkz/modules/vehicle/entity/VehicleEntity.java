@@ -1,16 +1,16 @@
 package org.parkz.modules.vehicle.entity;
 
-import jakarta.persistence.*;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
-import org.parkz.shared.constant.TableName;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;
 import org.parkz.modules.user.entity.UserEntity;
+import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.util.Collections;

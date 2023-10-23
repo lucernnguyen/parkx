@@ -8,6 +8,7 @@ import org.parkz.modules.parking_session.model.filter.AppParkingSessionFilter;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
+import org.parkz.modules.parking_session.model.request.InitCheckoutRequest;
 import org.springframework.fastboot.rest.common.controller.IGetInfoListWithFilterController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
@@ -23,25 +24,31 @@ public interface IAppParkingSessionController extends
 
     @PostMapping("/checkIn")
     @Operation(
-            description = "[STEP 1] Create check in session, gen QR code = sessionId"
+            description = "[CHECKIN][STEP 1][User] Create check in session, gen QR code = sessionId"
     )
     ResponseEntity<BaseResponse<ParkingSessionInfo>> checkIn(@Valid @RequestBody CreateParkingSessionRequest request);
 
     @GetMapping("/{id}")
     @Operation(
-            description = "[STEP 2] Get session info, staff check info in result"
+            description = "[CHECKIN][STEP 2][Staff] Get session info, staff check info in result"
     )
     ResponseEntity<BaseResponse<ParkingSessionInfo>> getSessionInfo(@PathVariable("id") UUID id);
 
     @PutMapping("/confirm")
     @Operation(
-            description = "[STEP 3] Staff confirm check in"
+            description = "[CHECKIN][STEP 3][Staff] Confirm check in"
     )
     ResponseEntity<BaseResponse<SuccessResponse>> confirm(@Valid @RequestBody ConfirmCheckInRequest request);
 
+    @PostMapping("/initCheckOut")
+    @Operation(
+            description = "[CHECKOUT][STEP 1][User] Init checkout action with sessionId and paymentType"
+    )
+    ResponseEntity<BaseResponse<SuccessResponse>> initCheckout(@Valid @RequestBody InitCheckoutRequest request);
+
     @PutMapping("/checkOut")
     @Operation(
-            description = "[STEP 4] Confirm checkout"
+            description = "[CHECKOUT][STEP 2][Staff] Confirm check out"
     )
     ResponseEntity<BaseResponse<SuccessResponse>> checkout(@Valid @RequestBody ConfirmCheckOutRequest request);
 }

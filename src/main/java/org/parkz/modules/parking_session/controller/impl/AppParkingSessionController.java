@@ -7,6 +7,7 @@ import org.parkz.modules.parking_session.model.ParkingSessionInfo;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
+import org.parkz.modules.parking_session.model.request.InitCheckoutRequest;
 import org.springframework.fastboot.rest.common.controller.base.BaseController;
 import org.springframework.fastboot.rest.common.factory.data.IDataFactory;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
@@ -37,6 +38,10 @@ public class AppParkingSessionController
     @Override
     public ResponseEntity<BaseResponse<SuccessResponse>> confirm(ConfirmCheckInRequest request) {
         return wrapResponse(() -> appParkingSessionFactory.confirmCheckIn(request));
+    }
+
+    public ResponseEntity<BaseResponse<SuccessResponse>> initCheckout(InitCheckoutRequest request) {
+        return wrapResponse(() -> appParkingSessionFactory.initCheckout(request));
     }
 
     @Override

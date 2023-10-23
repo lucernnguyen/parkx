@@ -1,30 +1,31 @@
 package org.parkz.modules.wallet.factory.app;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.parkz.cache.domain.Currency;
 import org.parkz.cache.factory.CurrencyFactory;
 import org.parkz.infrastructure.client.paypal.PayPalClient;
 import org.parkz.infrastructure.client.paypal.common.*;
 import org.parkz.infrastructure.client.paypal.request.CreateOrderRequest;
 import org.parkz.infrastructure.client.paypal.response.CreateOrderResponse;
-import org.parkz.modules.wallet.entity.TransactionEntity;
 import org.parkz.modules.wallet.entity.WalletEntity;
 import org.parkz.modules.wallet.entity.redis.TransactionRedisEntity;
 import org.parkz.modules.wallet.enums.TransactionErrorCode;
-import org.parkz.modules.wallet.enums.TransactionStatus;
+import org.parkz.modules.wallet.enums.TransactionType;
+import org.parkz.modules.wallet.enums.WalletErrorCode;
+import org.parkz.modules.wallet.factory.ITransactionFactory;
 import org.parkz.modules.wallet.factory.impl.WalletFactory;
-import org.parkz.modules.wallet.mapper.TransactionMapper;
 import org.parkz.modules.wallet.model.WalletInfo;
 import org.parkz.modules.wallet.model.request.DepositRequest;
 import org.parkz.modules.wallet.model.request.InquiryRequest;
 import org.parkz.modules.wallet.model.response.InquiryResponse;
-import org.parkz.modules.wallet.repository.TransactionRepository;
-import org.parkz.modules.wallet.repository.redis.TransactionRedisRepository;
 import org.parkz.shared.enums.CurrencyCode;
+import org.parkz.shared.event.parking_session.InitCheckOutEvent;
+import org.parkz.shared.event.parking_session.PaymentBeforeCheckOutEvent;
 import org.parkz.shared.event.user.UserCreatedEvent;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.fastboot.exception.InvalidException;
-import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 import org.springframework.fastboot.security.utils.JwtUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,15 +35,15 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppWalletFactory extends WalletFactory implements IAppWalletFactory {
 
-    private final TransactionRepository transactionRepository;
-    private final TransactionRedisRepository transactionRedisRepository;
     private final PayPalClient payPalClient;
     private final CurrencyFactory currencyFactory;
-    private final TransactionMapper transactionMapper;
+    @Qualifier("transactionFactory")
+    private final ITransactionFactory transactionFactory;
     @Value("${paypal.deposit-url}")
     private final String depositUrl;
 
@@ -63,14 +64,11 @@ public class AppWalletFactory extends WalletFactory implements IAppWalletFactory
     @Override
     @Transactional
     public InquiryResponse inquiry(InquiryRequest request) throws InvalidException {
-        WalletEntity wallet = getWalletByContext();
-        TransactionRedisEntity transaction = transactionRedisRepository.save(TransactionRedisEntity.builder()
-                .balance(wallet.getBalance())
-                .amount(request.getAmount())
-                .status(TransactionStatus.PENDING)
-                .walletId(wallet.getId())
-                .userId(JwtUtils.getUserIdString())
-                .build()
+        log.info("[APP_WALLET] Init inquiry proceed with request: {}", request);
+        TransactionRedisEntity transaction = transactionFactory.createTransactionRedis(
+                JwtUtils.getUserIdString(),
+                request.getAmount(),
+                TransactionType.DEPOSIT
         );
         Currency currency = currencyFactory.getByCode(CurrencyCode.getDefault());
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(depositUrl)
@@ -108,32 +106,64 @@ public class AppWalletFactory extends WalletFactory implements IAppWalletFactory
                         .build()
                 )
                 .build();
+        log.info("[APP_WALLET] Creating PayPal Order Url with request");
         CreateOrderResponse orderResponse = payPalClient.createOrder(orderRequest);
-        transaction.setRefTransactionId(orderResponse.getId());
-        transactionRedisRepository.save(transaction);
+        transactionFactory.setTransactionRedisRefId(transaction.getId(), orderResponse.getId());
+        String approveLink = orderResponse.getApproveLink();
+        log.info("[APP_WALLET] Inquiry successfully with PayPal Approve Link: {}", approveLink);
         return InquiryResponse.builder()
-                .redirectUrl(orderResponse.getApproveLink())
+                .redirectUrl(approveLink)
                 .build();
     }
 
     @Override
     @Transactional
-    public SuccessResponse deposit(DepositRequest request) throws InvalidException {
-        TransactionRedisEntity transactionRedis = transactionRedisRepository.findById(request.getTransactionId())
-                .orElseThrow(() -> new InvalidException(TransactionErrorCode.TRANSACTION_NOT_FOUND));
-        WalletEntity wallet = repository.findByUserId(transactionRedis.getUserId())
-                .orElseThrow(() -> new InvalidException(notFound()));
+    public void deposit(DepositRequest request) throws InvalidException {
+        log.info("[APP_WALLET] Start deposit proceed with PayPal, request body: {}", request);
+        TransactionRedisEntity transactionRedis = transactionFactory.findTransactionRedisByIdNotNull(request.getTransactionId());
+        log.info("[APP_WALLET] Transaction data from redis: {}", transactionRedis);
+        WalletEntity wallet = findWalletByUserIdNotNull(transactionRedis.getUserId());
         CreateOrderResponse orderResponse = payPalClient.captureOrder(transactionRedis.getRefTransactionId());
         if (orderResponse != null && OrderStatus.COMPLETED.equals(orderResponse.getStatus())) {
-            TransactionEntity transaction = transactionMapper.transactionEntity(transactionRedis)
-                    .setStatus(TransactionStatus.SUCCESS)
-                    .setOrderData(orderResponse);
-            transactionRepository.save(transaction);
-            wallet.setBalance(wallet.getBalance().add(transaction.getAmount()));
+            log.info("[APP_WALLET] Capture order from PayPal successfully with response: {}", orderResponse);
+            transactionFactory.deposit(transactionRedis, orderResponse);
+            wallet.addBalance(transactionRedis.getAmount());
             repository.save(wallet);
-            return SuccessResponse.status(true);
         }
-        return SuccessResponse.status(false);
+        log.warn("[APP_WALLET] Capture order from PayPal failed");
+        throw new InvalidException(WalletErrorCode.WALLET_DEPOSIT_CAPTURE_PAYPAL_FAILED);
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, value = InitCheckOutEvent.class)
+    protected void initCheckOutListener(InitCheckOutEvent event) throws InvalidException {
+        log.info("[APP_WALLET] Init check out with event data: {}", event);
+        WalletEntity wallet = findWalletByUserIdNotNull(event.userId());
+        if (!wallet.checkBalance(event.vehicleTypePrice())) {
+            log.warn("[APP_WALLET] Wallet of userId {} not enough", event.userId());
+            throw new InvalidException(TransactionErrorCode.TRANSACTION_BALANCE_NOT_ENOUGH);
+        }
+        TransactionRedisEntity transactionRedis = transactionFactory.createTransactionRedis(
+                event.userId(),
+                event.vehicleTypePrice(),
+                TransactionType.PAYMENT
+        );
+        transactionFactory.setTransactionRedisRefId(transactionRedis.getId(), event.parkingSessionId().toString());
+        log.info("[APP_WALLET]: Init check out successfully with transaction data: {}", transactionRedis);
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, value = PaymentBeforeCheckOutEvent.class)
+    protected void paymentBeforeCheckOutListener(PaymentBeforeCheckOutEvent event) throws InvalidException {
+        log.info("[APP_WALLET]: Init payment before check out with event data: {}", event);
+        TransactionRedisEntity transactionRedis = transactionFactory.findTransactionRedisByRefIdNotNull(event.parkingSessionId().toString());
+        WalletEntity wallet = findWalletByUserIdNotNull(transactionRedis.getUserId());
+        if (!wallet.checkBalance(transactionRedis.getAmount())) {
+            log.warn("[APP_WALLET] Wallet of userId {} not enough", wallet.getUserId());
+            throw new InvalidException(TransactionErrorCode.TRANSACTION_BALANCE_NOT_ENOUGH);
+        }
+        transactionFactory.deposit(transactionRedis, null);
+        wallet.subtractBalance(transactionRedis.getAmount());
+        repository.save(wallet);
+        log.info("[APP_WALLET]: Payment successfully for parking sessionId: {}", event.parkingSessionId());
     }
 
     private WalletEntity getWalletByContext() throws InvalidException {

@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.ColumnDefault;
 import org.parkz.shared.constant.TableName;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -34,4 +36,8 @@ public class VehicleTypeEntity implements Serializable {
     @Builder.Default
     @Column(columnDefinition = "INTEGER")
     private Integer totalSlot = 0;
+    @Builder.Default
+    @ColumnDefault("0.0")
+    @Column(nullable = false)
+    private BigDecimal price = new BigDecimal("0.0");
 }

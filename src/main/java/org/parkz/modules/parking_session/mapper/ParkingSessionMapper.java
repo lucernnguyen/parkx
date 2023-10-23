@@ -36,6 +36,7 @@ public abstract class ParkingSessionMapper implements BaseMapper<ParkingSessionI
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", expression = "java(UUID.randomUUID())")
     @Mapping(target = "timeToLive", expression = "java(Duration.ofMinutes(2).toSeconds())")
+    @Mapping(target = "status", constant = "CREATED")
     @Mapping(target = "vehicleId", source = "request.vehicleId")
     @Mapping(target = "parkingSlotId", source = "request.parkingSlotId", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "vehicleSnapShot", source = "vehicleInfo")
@@ -45,6 +46,7 @@ public abstract class ParkingSessionMapper implements BaseMapper<ParkingSessionI
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "guestName", source = "guestName")
     @Mapping(target = "guestPhone", source = "guestPhone")
+    @Mapping(target = "status", constant = "CHECKED_IN")
     @Mapping(target = "vehicleId", source = "vehicleId")
     @Mapping(target = "parkingSlotId", source = "parkingSlotId")
     @Mapping(target = "vehicleSnapShot", source = "vehicleSnapShot")
@@ -52,4 +54,5 @@ public abstract class ParkingSessionMapper implements BaseMapper<ParkingSessionI
     public abstract ParkingSessionEntity createConvertToEntity(ParkingSessionRedisEntity entity);
 
     public abstract ParkingSessionInfo convertToDetail(ParkingSessionRedisEntity entity);
+
 }
