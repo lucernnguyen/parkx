@@ -37,6 +37,7 @@ public abstract class VehicleMapper implements BaseMapper<VehicleInfo, VehicleIn
 
     @Override
     @Mapping(target = "vehicleTypeName", source = "vehicleType.name")
+    @Mapping(target = "vehicleTypePrice", source = "vehicleType.price")
     @Mapping(target = "parkingSessionActive", source = "parkingSessionActive", qualifiedByName = "convertToDetailMapper")
     public abstract VehicleInfo convertToDetail(VehicleEntity entity) throws InvalidException;
 

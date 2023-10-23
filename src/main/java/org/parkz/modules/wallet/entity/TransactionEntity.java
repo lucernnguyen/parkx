@@ -11,6 +11,7 @@ import org.hibernate.type.SqlTypes;
 import org.parkz.infrastructure.client.paypal.response.CreateOrderResponse;
 import org.parkz.modules.user.entity.UserEntity;
 import org.parkz.modules.wallet.enums.TransactionStatus;
+import org.parkz.modules.wallet.enums.TransactionType;
 import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
@@ -40,6 +41,8 @@ public class TransactionEntity extends Audit<String> {
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
     @JdbcTypeCode(SqlTypes.JSON)
     private CreateOrderResponse orderData;
     @Column(length = 40)

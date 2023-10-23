@@ -13,6 +13,7 @@ import org.parkz.modules.parking_session.model.ParkingSessionInfo;
 import org.springframework.fastboot.rest.common.model.IBaseData;
 import org.springframework.fastboot.rest.serializer.json.View;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -43,8 +44,10 @@ public class VehicleInfo implements IBaseData<UUID> {
     private List<String> images = Collections.emptyList();
     @JsonView({View.Include.Create.class, View.Exclude.Update.class})
     private Integer vehicleTypeId;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Exclude.Update.class})
     private String vehicleTypeName;
+    @JsonView({View.Exclude.Create.class, View.Exclude.Update.class})
+    private BigDecimal vehicleTypePrice;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ParkingSessionInfo parkingSessionActive;
 

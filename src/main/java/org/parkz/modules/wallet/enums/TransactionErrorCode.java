@@ -9,7 +9,8 @@ import org.springframework.fastboot.exception.StatusMapping;
 @RequiredArgsConstructor
 public enum TransactionErrorCode implements IErrorCode {
 
-    TRANSACTION_NOT_FOUND(1, StatusMapping.NOT_FOUND)
+    TRANSACTION_NOT_FOUND(1, StatusMapping.NOT_FOUND),
+    TRANSACTION_BALANCE_NOT_ENOUGH(2, StatusMapping.BAD_REQUEST)
     ;
     private final int code;
     private final StatusMapping statusMapping;

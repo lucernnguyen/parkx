@@ -8,8 +8,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-import org.parkz.shared.constant.TableName;
 import org.parkz.modules.user.enums.GroupKind;
+import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.util.ArrayList;

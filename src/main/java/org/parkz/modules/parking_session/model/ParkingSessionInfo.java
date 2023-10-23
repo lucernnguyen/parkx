@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
+import org.parkz.modules.parking_session.enums.ParkingSessionStatus;
 import org.parkz.modules.vehicle.model.VehicleInfo;
 import org.springframework.fastboot.rest.common.model.IBaseData;
 import org.springframework.fastboot.rest.serializer.json.View;
@@ -26,6 +27,7 @@ public class ParkingSessionInfo implements IBaseData<UUID> {
     private LocalDateTime checkOutTime;
     private String guestName;
     private String guestPhone;
+    private ParkingSessionStatus status;
     @JsonView({View.Include.Create.class, View.Exclude.Update.class})
     private UUID vehicleId;
     @JsonView({View.Include.Create.class, View.Exclude.Update.class})

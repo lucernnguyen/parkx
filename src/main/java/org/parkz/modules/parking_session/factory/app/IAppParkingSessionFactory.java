@@ -5,6 +5,7 @@ import org.parkz.modules.parking_session.model.ParkingSessionInfo;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
+import org.parkz.modules.parking_session.model.request.InitCheckoutRequest;
 import org.springframework.fastboot.exception.InvalidException;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 
@@ -17,6 +18,8 @@ public interface IAppParkingSessionFactory extends IParkingSessionFactory {
     ParkingSessionInfo getSessionInfo(UUID sessionId) throws InvalidException;
 
     SuccessResponse confirmCheckIn(ConfirmCheckInRequest request) throws InvalidException;
+
+    SuccessResponse initCheckout(InitCheckoutRequest request) throws InvalidException;
 
     SuccessResponse checkOut(ConfirmCheckOutRequest request) throws InvalidException;
 }
