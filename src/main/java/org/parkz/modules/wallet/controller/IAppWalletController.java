@@ -7,6 +7,7 @@ import org.parkz.modules.wallet.model.WalletInfo;
 import org.parkz.modules.wallet.model.request.DepositRequest;
 import org.parkz.modules.wallet.model.request.InquiryRequest;
 import org.parkz.modules.wallet.model.response.InquiryResponse;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.fastboot.rest.common.controller.IGetDetailByContextController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,5 @@ public interface IAppWalletController extends IGetDetailByContextController<UUID
     ResponseEntity<BaseResponse<InquiryResponse>> inquiry(@Valid @RequestBody InquiryRequest request);
 
     @GetMapping("/public/deposit")
-    void deposit(@Valid DepositRequest request, HttpServletResponse response);
+    void deposit(@Valid @ParameterObject DepositRequest request, HttpServletResponse response);
 }
