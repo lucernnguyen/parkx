@@ -48,7 +48,7 @@ public class VehicleInfo implements IBaseData<UUID> {
     private String vehicleTypeName;
     @JsonView({View.Exclude.Create.class, View.Exclude.Update.class})
     private BigDecimal vehicleTypePrice;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView({View.Exclude.Create.class, View.Exclude.Update.class})
     private ParkingSessionInfo parkingSessionActive;
 
 }
