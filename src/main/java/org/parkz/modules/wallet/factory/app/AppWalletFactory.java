@@ -129,6 +129,7 @@ public class AppWalletFactory extends WalletFactory implements IAppWalletFactory
             transactionFactory.deposit(transactionRedis, orderResponse);
             wallet.addBalance(transactionRedis.getAmount());
             repository.save(wallet);
+            return;
         }
         log.warn("[APP_WALLET] Capture order from PayPal failed");
         throw new InvalidException(WalletErrorCode.WALLET_DEPOSIT_CAPTURE_PAYPAL_FAILED);
