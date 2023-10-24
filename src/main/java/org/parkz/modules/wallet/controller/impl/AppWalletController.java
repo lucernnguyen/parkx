@@ -8,6 +8,7 @@ import org.parkz.modules.wallet.factory.app.IAppWalletFactory;
 import org.parkz.modules.wallet.model.WalletInfo;
 import org.parkz.modules.wallet.model.request.DepositRequest;
 import org.parkz.modules.wallet.model.request.InquiryRequest;
+import org.parkz.modules.wallet.model.response.DepositResponse;
 import org.parkz.modules.wallet.model.response.InquiryResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.fastboot.exception.InvalidException;
@@ -43,9 +44,9 @@ public class AppWalletController
     @Override
     public void deposit(DepositRequest request, HttpServletResponse response) {
         try {
-            appWalletFactory.deposit(request);
+            DepositResponse depositResponse = appWalletFactory.deposit(request);
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(mobileAppOpenUrl)
-                    .queryParam("transactionId", request.getTransactionId())
+                    .queryParam("transactionId", depositResponse.getTransactionId())
                     .build();
             log.info("[WALLET] Redirect user to deeplink {}", uriComponents.toUriString());
             response.setHeader(HttpHeaders.LOCATION, uriComponents.toUriString());

@@ -17,7 +17,7 @@ public interface ITransactionFactory extends IDataFactory<UUID, TransactionInfo,
 
     void setTransactionRedisRefId(UUID id, String refId) throws InvalidException;
 
-    void deposit(TransactionRedisEntity transactionRedis, CreateOrderResponse orderResponse) throws InvalidException;
+    UUID deposit(TransactionRedisEntity transactionRedis, CreateOrderResponse orderResponse) throws InvalidException;
 
     TransactionRedisEntity findTransactionRedisByIdNotNull(UUID id) throws InvalidException;
 
