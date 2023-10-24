@@ -1,5 +1,6 @@
 package org.parkz.infrastructure.client.paypal.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class CreateOrderResponse {
     @JsonProperty("purchase_units")
     private List<PurchaseUnit> purchaseUnits;
 
+    @JsonIgnore
     public String getApproveLink() {
         if (CollectionUtils.isEmpty(links)) {
             return null;

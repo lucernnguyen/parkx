@@ -25,6 +25,7 @@ import org.parkz.shared.event.parking_session.VehicleCheckOutEvent;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.fastboot.exception.InvalidException;
+import org.springframework.fastboot.rest.common.filter.IFilter;
 import org.springframework.fastboot.rest.common.mapper.BaseMapper;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
 import org.springframework.fastboot.security.utils.JwtUtils;
@@ -69,10 +70,13 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
     }
 
     @Override
-    public ParkingSessionInfo getSessionInfo(UUID sessionId) throws InvalidException {
-        ParkingSessionRedisEntity parkingSession = parkingSessionRedisRepository.findById(sessionId)
-                .orElseThrow(() -> new InvalidException(notFound()));
-        return parkingSessionMapper.convertToDetail(parkingSession);
+    protected <F extends IFilter> ParkingSessionInfo aroundGetDetail(UUID id, F filter) throws InvalidException {
+        ParkingSessionRedisEntity parkingSession = parkingSessionRedisRepository.findById(id)
+                .orElse(null);
+        if (parkingSession != null) {
+            return parkingSessionMapper.convertToDetail(parkingSession);
+        }
+        return super.aroundGetDetail(id, filter);
     }
 
     @Override

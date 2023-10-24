@@ -15,8 +15,6 @@ public interface IAppParkingSessionFactory extends IParkingSessionFactory {
 
     ParkingSessionInfo checkin(CreateParkingSessionRequest request) throws InvalidException;
 
-    ParkingSessionInfo getSessionInfo(UUID sessionId) throws InvalidException;
-
     SuccessResponse confirmCheckIn(ConfirmCheckInRequest request) throws InvalidException;
 
     SuccessResponse initCheckout(InitCheckoutRequest request) throws InvalidException;

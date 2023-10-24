@@ -31,11 +31,6 @@ public class AppParkingSessionController
     }
 
     @Override
-    public ResponseEntity<BaseResponse<ParkingSessionInfo>> getSessionInfo(UUID id) {
-        return wrapResponse(() -> appParkingSessionFactory.getSessionInfo(id));
-    }
-
-    @Override
     public ResponseEntity<BaseResponse<SuccessResponse>> confirm(ConfirmCheckInRequest request) {
         return wrapResponse(() -> appParkingSessionFactory.confirmCheckIn(request));
     }
