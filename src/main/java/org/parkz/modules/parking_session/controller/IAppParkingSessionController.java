@@ -9,6 +9,7 @@ import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
 import org.parkz.modules.parking_session.model.request.InitCheckoutRequest;
+import org.springframework.fastboot.rest.common.controller.IGetDetailByIdController;
 import org.springframework.fastboot.rest.common.controller.IGetInfoListWithFilterController;
 import org.springframework.fastboot.rest.common.model.response.BaseResponse;
 import org.springframework.fastboot.rest.common.model.response.SuccessResponse;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Tag(name = "App Parking Session Controller")
 @RequestMapping("/api/v1/app/parkingSession")
 public interface IAppParkingSessionController extends
+        IGetDetailByIdController<UUID, ParkingSessionInfo>,
         IGetInfoListWithFilterController<UUID, ParkingSessionInfo, AppParkingSessionFilter> {
 
     @PostMapping("/checkIn")
@@ -28,11 +30,14 @@ public interface IAppParkingSessionController extends
     )
     ResponseEntity<BaseResponse<ParkingSessionInfo>> checkIn(@Valid @RequestBody CreateParkingSessionRequest request);
 
-    @GetMapping("/{id}")
+    @Override
+    @GetMapping("{id}/detail")
     @Operation(
             description = "[CHECKIN][STEP 2][Staff] Get session info, staff check info in result"
     )
-    ResponseEntity<BaseResponse<ParkingSessionInfo>> getSessionInfo(@PathVariable("id") UUID id);
+    default ResponseEntity<BaseResponse<ParkingSessionInfo>> getDetailById(@PathVariable("id") UUID id) {
+        return IGetDetailByIdController.super.getDetailById(id);
+    }
 
     @PutMapping("/confirm")
     @Operation(

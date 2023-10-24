@@ -138,7 +138,7 @@ common:
 
 logging:
   level:
-    # org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+#    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
     org.springframework.fastboot.security.interceptor: off
     org.parkz.infrastructure.client: debug
 
