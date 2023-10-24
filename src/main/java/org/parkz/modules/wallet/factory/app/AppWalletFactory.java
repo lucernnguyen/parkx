@@ -18,6 +18,7 @@ import org.parkz.modules.wallet.factory.impl.WalletFactory;
 import org.parkz.modules.wallet.model.WalletInfo;
 import org.parkz.modules.wallet.model.request.DepositRequest;
 import org.parkz.modules.wallet.model.request.InquiryRequest;
+import org.parkz.modules.wallet.model.response.DepositResponse;
 import org.parkz.modules.wallet.model.response.InquiryResponse;
 import org.parkz.shared.enums.CurrencyCode;
 import org.parkz.shared.event.parking_session.InitCheckOutEvent;
@@ -34,6 +35,8 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -118,7 +121,7 @@ public class AppWalletFactory extends WalletFactory implements IAppWalletFactory
 
     @Override
     @Transactional
-    public void deposit(DepositRequest request) throws InvalidException {
+    public DepositResponse deposit(DepositRequest request) throws InvalidException {
         log.info("[APP_WALLET] Start deposit proceed with PayPal, request body: {}", request);
         TransactionRedisEntity transactionRedis = transactionFactory.findTransactionRedisByIdNotNull(request.getTransactionId());
         log.info("[APP_WALLET] Transaction data from redis: {}", transactionRedis);
@@ -126,10 +129,12 @@ public class AppWalletFactory extends WalletFactory implements IAppWalletFactory
         CreateOrderResponse orderResponse = payPalClient.captureOrder(transactionRedis.getRefTransactionId());
         if (orderResponse != null && OrderStatus.COMPLETED.equals(orderResponse.getStatus())) {
             log.info("[APP_WALLET] Capture order from PayPal successfully with response: {}", orderResponse);
-            transactionFactory.deposit(transactionRedis, orderResponse);
+            UUID transactionId = transactionFactory.deposit(transactionRedis, orderResponse);
             wallet.addBalance(transactionRedis.getAmount());
             repository.save(wallet);
-            return;
+            return DepositResponse.builder()
+                    .transactionId(transactionId)
+                    .build();
         }
         log.warn("[APP_WALLET] Capture order from PayPal failed");
         throw new InvalidException(WalletErrorCode.WALLET_DEPOSIT_CAPTURE_PAYPAL_FAILED);

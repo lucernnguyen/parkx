@@ -64,16 +64,19 @@ public class TransactionFactory
     }
 
     @Override
-    public void deposit(TransactionRedisEntity transactionRedis, CreateOrderResponse orderResponse) throws InvalidException {
+    public UUID deposit(TransactionRedisEntity transactionRedis, CreateOrderResponse orderResponse) throws InvalidException {
         log.info("[TRANSACTION] Start deposit with data: {}", transactionRedis);
         if (orderResponse != null) {
             log.info("[TRANSACTION] Order data: {}", orderResponse);
         }
-        TransactionEntity transaction = transactionMapper.toTransactionEntity(transactionRedis)
-                .setStatus(TransactionStatus.SUCCESS)
-                .setOrderData(orderResponse);
-        repository.save(transaction);
+        TransactionEntity transaction = repository.save(
+                transactionMapper.toTransactionEntity(transactionRedis)
+                        .setStatus(TransactionStatus.SUCCESS)
+                        .setOrderData(orderResponse)
+        );
+        transactionRedisRepository.delete(transactionRedis);
         log.info("[TRANSACTION] Deposit successfully with transactionId: {}", transaction.getId());
+        return transaction.getId();
     }
 
     public TransactionRedisEntity findTransactionRedisByIdNotNull(UUID id) throws InvalidException {
