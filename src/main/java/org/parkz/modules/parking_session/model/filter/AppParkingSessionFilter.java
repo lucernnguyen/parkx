@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Data;
+import lombok.NonNull;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.fastboot.rest.common.filter.IFilter;
@@ -21,7 +22,7 @@ public class AppParkingSessionFilter implements Specification<ParkingSessionEnti
     private Boolean active;
 
     @Override
-    public Predicate toPredicate(Root<ParkingSessionEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(@NonNull Root<ParkingSessionEntity> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (getVehicleId() != null) {
@@ -36,6 +37,7 @@ public class AppParkingSessionFilter implements Specification<ParkingSessionEnti
         }
 
         predicates.add(cb.equal(root.get("vehicle").get("userId"), JwtUtils.getUserIdString()));
+        query.orderBy(cb.desc(root.get(ParkingSessionEntity.Fields.createdDate)));
 
         return cb.and(predicates.toArray(Predicate[]::new));
     }

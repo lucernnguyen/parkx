@@ -104,6 +104,15 @@ spring:
   thymeleaf:
     check-template-location: false
     check-template: false
+  minio:
+    check-bucket: false
+    url: https://api-minio.ic-fpt.click
+    access-key: Kdi2M1qWZYVjiNnMPnUn
+    secret-key: jkbIeIZa6f6kgKYu7JaOGkWFv3h0VRVFqAkeLNVW
+    bucket: parkx-local
+    secure: true
+    create-bucket: false
+    pre-signed-upload-duration: 60
 
 common:
   rest:
@@ -126,8 +135,10 @@ common:
         - /actuator/**
         - /mock/**
         - /api/v1/app/*/public/**
+        - /api/v1/media/public/**
       ignore-authorization:
         - /api/v1/auth/**
+        - /api/v1/media/**
     oauth2-resource-server:
       firebase:
         issuer-uri: https://securetoken.google.com/parkx-22f01

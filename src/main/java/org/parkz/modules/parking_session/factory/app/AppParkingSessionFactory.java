@@ -87,6 +87,7 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
         ParkingSessionEntity parkingSession = repository.save(
                 parkingSessionMapper.createConvertToEntity(parkingSessionRedis)
                         .setConfirmed(true)
+                        .setCheckInCapture(request.getCheckInCapture())
                         .setCheckInTime(LocalDateTime.now())
         );
         applicationEventPublisher.publishEvent(new VehicleCheckInEvent(parkingSession.getVehicleId(), parkingSession.getParkingSlotId()));
@@ -127,7 +128,8 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
         }
         parkingSession
                 .setCheckOutTime(LocalDateTime.now())
-                .setStatus(ParkingSessionStatus.CHECKED_OUT);
+                .setStatus(ParkingSessionStatus.CHECKED_OUT)
+                .setCheckOutCapture(request.getCheckOutCapture());
         repository.save(parkingSession);
         applicationEventPublisher.publishEvent(new VehicleCheckOutEvent(parkingSession.getVehicleId(), parkingSession.getParkingSlotId()));
         log.info("[PARKING_SESSION] Confirm checkout for sessionId {} successfully", request.getSessionId());
