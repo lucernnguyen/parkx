@@ -67,6 +67,8 @@ ext {
     commonLang3Version = '3.13.0'
     lombokMapstructBindingVersion = '0.2.0'
     mapstructVersion = '1.5.5.Final'
+    minIOVersion = '8.5.6'
+    commonIOVersion = '2.11.0'
 }
 
 repositories {
@@ -166,11 +168,15 @@ dependencies {
     compileOnly "org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion"
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
+    // MinIO
+    implementation "io.minio:minio:$minIOVersion"
+
     // Serializer
     implementation "com.esotericsoftware:kryo:$kryoVersion"
 
     //Utilities
     implementation "org.apache.commons:commons-lang3:$commonLang3Version"
+    implementation "commons-io:commons-io:$commonIOVersion"
 }
 
 tasks.named('test') {

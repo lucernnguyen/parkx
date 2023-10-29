@@ -1,6 +1,7 @@
 package org.parkz.modules.parking_session.entity;
 
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +20,8 @@ import org.parkz.shared.constant.TableName;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -29,7 +32,12 @@ import java.util.UUID;
 @FieldNameConstants
 @Entity
 @Builder
-@Table(name = TableName.PARKING_SESSION)
+@Table(
+        name = TableName.PARKING_SESSION,
+        indexes = {
+                @Index(name = "idx_created_date", columnList = "createdDate desc")
+        }
+)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = TableName.PARKING_SESSION)
 public class ParkingSessionEntity {
 
@@ -72,6 +80,15 @@ public class ParkingSessionEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(updatable = false)
     private ParkingSlotInfo parkingSlotSnapShot;
+    @Builder.Default
+    @JdbcTypeCode(SqlTypes.JSON)
+    @ColumnDefault("'[]'::jsonb")
+    private List<String> checkInCapture = new ArrayList<>();
+    @Builder.Default
+    @JdbcTypeCode(SqlTypes.JSON)
+    @ColumnDefault("'[]'::jsonb")
+    private List<String> checkOutCapture = new ArrayList<>();
+
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = VehicleEntity.class, optional = false)

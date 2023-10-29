@@ -49,8 +49,10 @@ common:
         - /actuator/**
         - /mock/**
         - /api/v1/app/*/public/**
+        - /api/v1/media/public/**
       ignore-authorization:
         - /api/v1/auth/**
+        - /api/v1/media/**
     api-key:
       - path: /api/v1/system/users/admin/create
         key: zLp63CqnIjCN4n9z
