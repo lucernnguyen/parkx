@@ -3,6 +3,7 @@ package org.parkz.modules.wallet.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Accessors(chain = true)
+@FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

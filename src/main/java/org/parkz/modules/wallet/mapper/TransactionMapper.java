@@ -31,8 +31,8 @@ public abstract class TransactionMapper implements BaseMapper<TransactionInfo, T
     }
 
     @Override
-    @InheritConfiguration(name = "convertToInfo")
-    @Named("convertToDetailMapper")
+    @Named("convertToInfoMapper")
     @Mapping(target = "userEmail", source = "user.email")
-    public abstract TransactionDetails convertToDetail(TransactionEntity entity) throws InvalidException;
+    public abstract TransactionInfo convertToInfo(TransactionEntity entity) throws InvalidException;
+
 }

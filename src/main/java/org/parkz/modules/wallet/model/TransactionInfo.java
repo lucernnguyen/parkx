@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.parkz.modules.wallet.enums.TransactionStatus;
 import org.parkz.modules.wallet.enums.TransactionType;
+import org.springframework.fastboot.jpa.entity.Audit;
 import org.springframework.fastboot.rest.common.model.IBaseData;
 
 import java.math.BigDecimal;
@@ -15,9 +16,10 @@ import java.util.UUID;
 @SuperBuilder
 @Jacksonized
 @NoArgsConstructor
-public class TransactionInfo implements IBaseData<UUID> {
+public class TransactionInfo extends Audit<String> implements IBaseData<UUID> {
 
     protected UUID id;
+    private String userEmail;
     private BigDecimal balance;
     private BigDecimal amount;
     private TransactionStatus status;
