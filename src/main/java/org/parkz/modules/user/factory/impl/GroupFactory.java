@@ -52,6 +52,13 @@ public class GroupFactory
     }
 
     @Override
+    protected void postUpdate(GroupEntity entity, GroupDetails detail) throws InvalidException {
+        List<PermissionEntity> permissions = permissionRepository.findAllById(detail.getPermissions());
+        entity.setPermissions(permissions);
+        repository.save(entity);
+    }
+
+    @Override
     protected <F extends IFilter> F preDelete(UUID id, F filter) throws InvalidException {
         if (repository.existsByIdAndDefaultGroup(id, true)) {
             throw new InvalidException(GroupErrorCode.GROUP_IS_DEFAULT);
