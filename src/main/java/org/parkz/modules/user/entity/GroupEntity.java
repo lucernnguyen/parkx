@@ -5,7 +5,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.parkz.modules.user.enums.GroupKind;
@@ -22,7 +21,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder(toBuilder = true)
+@Builder
 @ToString
 @Table(
         name = TableName.GROUP,
@@ -70,6 +69,9 @@ public class GroupEntity extends Audit<String> {
     public void setPermissions(List<PermissionEntity> permissions) {
         if (permissions == null) {
             return;
+        }
+        if (groupPermissions == null) {
+            this.groupPermissions = new ArrayList<>();
         }
         this.groupPermissions.clear();
         for (PermissionEntity permission : permissions) {

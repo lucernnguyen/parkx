@@ -14,5 +14,4 @@ public class TransactionDetails extends TransactionInfo {
     private String refTransactionId;
     private UUID walletId;
     private String userId;
-    private String userEmail;
 }

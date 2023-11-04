@@ -7,6 +7,7 @@ import org.parkz.modules.parking.factory.IParkingSlotFactory;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.parking_session.entity.ParkingSessionEntity;
 import org.parkz.modules.parking_session.entity.redis.ParkingSessionRedisEntity;
+import org.parkz.modules.parking_session.enums.ParkingSessionErrorCode;
 import org.parkz.modules.parking_session.enums.ParkingSessionStatus;
 import org.parkz.modules.parking_session.enums.PaymentType;
 import org.parkz.modules.parking_session.factory.impl.ParkingSessionFactory;
@@ -101,6 +102,9 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
     public SuccessResponse initCheckout(InitCheckoutRequest request) throws InvalidException {
         log.info("[PARKING_SESSION] Start check out flow with request: {}", request);
         ParkingSessionEntity parkingSession = findByIdNotNull(request.getSessionId());
+        if (parkingSession.getCheckOutTime() != null) {
+            throw new InvalidException(ParkingSessionErrorCode.PARKING_SESSION_CHECKED_OUT);
+        }
         if (PaymentType.E_WALLET.equals(request.getPaymentType())) {
             log.info("[PARKING_SESSION] User init payment with type {}", request.getPaymentType());
             applicationEventPublisher.publishEvent(new InitCheckOutEvent(
@@ -123,6 +127,9 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
     public SuccessResponse checkOut(ConfirmCheckOutRequest request) throws InvalidException {
         log.info("[PARKING_SESSION] Confirm checkout with request: {}", request);
         ParkingSessionEntity parkingSession = findByIdNotNull(request.getSessionId());
+        if (parkingSession.getCheckOutTime() != null) {
+            throw new InvalidException(ParkingSessionErrorCode.PARKING_SESSION_CHECKED_OUT);
+        }
         if (PaymentType.E_WALLET.equals(parkingSession.getPaymentType())) {
             applicationEventPublisher.publishEvent(new PaymentBeforeCheckOutEvent(parkingSession.getId()));
         }

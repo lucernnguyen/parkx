@@ -11,6 +11,7 @@ public enum ParkingSessionErrorCode implements IErrorCode {
 
     PARKING_SESSION_NOT_FOUND(1, StatusMapping.NOT_FOUND),
     PARKING_SESSION_DUPLICATE_VEHICLE_CHECKIN(2, StatusMapping.CONFLICT),
+    PARKING_SESSION_CHECKED_OUT(3, StatusMapping.BAD_REQUEST),
 
     ;
     private final int code;

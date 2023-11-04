@@ -48,7 +48,7 @@ public abstract class ParkingSessionMapper implements BaseMapper<ParkingSessionI
     @Mapping(target = "guestPhone", source = "guestPhone")
     @Mapping(target = "status", constant = "CHECKED_IN")
     @Mapping(target = "vehicleId", source = "vehicleId")
-    @Mapping(target = "parkingSlotId", source = "parkingSlotId")
+    @Mapping(target = "parkingSlotId", source = "parkingSlotId", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "vehicleSnapShot", source = "vehicleSnapShot")
     @Mapping(target = "parkingSlotSnapShot", source = "parkingSlotSnapShot")
     public abstract ParkingSessionEntity createConvertToEntity(ParkingSessionRedisEntity entity);
