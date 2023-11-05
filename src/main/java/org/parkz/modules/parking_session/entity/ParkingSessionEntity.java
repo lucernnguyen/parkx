@@ -2,6 +2,7 @@ package org.parkz.modules.parking_session.entity;
 
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +14,7 @@ import org.parkz.modules.parking.entity.ParkingSlotEntity;
 import org.parkz.modules.parking.model.ParkingSlotInfo;
 import org.parkz.modules.parking_session.enums.ParkingSessionStatus;
 import org.parkz.modules.parking_session.enums.PaymentType;
+import org.parkz.modules.statistic.model.ParkingSessionByTodayAndCurrentMonth;
 import org.parkz.modules.vehicle.entity.VehicleEntity;
 import org.parkz.modules.vehicle.model.VehicleInfo;
 import org.parkz.modules.wallet.entity.TransactionEntity;
@@ -39,6 +41,29 @@ import java.util.UUID;
         }
 )
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = TableName.PARKING_SESSION)
+@NamedNativeQuery(
+        name = "parkingSessionByTime",
+        query = """
+                SELECT
+                    COALESCE(SUM(CASE WHEN ps.check_in_time IS NOT NULL THEN 1 ELSE 0 END), 0) AS checkedIn,
+                    COALESCE(SUM(CASE WHEN ps.check_in_time IS NOT NULL AND ps.check_out_time IS NOT NULL THEN 1 ELSE 0 END), 0) AS checkedOut
+                FROM parkx_parking_session ps
+                WHERE
+                    ps.created_date >= :from
+                    AND ps.created_date <= :to
+                """,
+        resultSetMapping = "ParkingSessionByTodayAndCurrentMonth.SessionStatus"
+)
+@SqlResultSetMapping(
+        name = "ParkingSessionByTodayAndCurrentMonth.SessionStatus",
+        classes = @ConstructorResult(
+                targetClass = ParkingSessionByTodayAndCurrentMonth.SessionStatus.class,
+                columns = {
+                        @ColumnResult(name = "checkedIn", type = int.class),
+                        @ColumnResult(name = "checkedOut", type = int.class)
+                }
+        )
+)
 public class ParkingSessionEntity {
 
     @Id
