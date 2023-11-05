@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 import org.parkz.infrastructure.client.paypal.response.CreateOrderResponse;
+import org.parkz.modules.statistic.model.RevenueChart;
 import org.parkz.modules.user.entity.UserEntity;
 import org.parkz.modules.wallet.enums.TransactionStatus;
 import org.parkz.modules.wallet.enums.TransactionType;
@@ -17,6 +18,7 @@ import org.parkz.shared.constant.TableName;
 import org.springframework.fastboot.jpa.entity.Audit;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +29,35 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = TableName.TRANSACTION)
+@Table(
+        name = TableName.TRANSACTION,
+        indexes = {
+                @Index(name = "idx_created_date_desc", columnList = "createdDate desc")
+        }
+)
+@NamedNativeQuery(
+        name = "revenueByDate",
+        query = """
+                SELECT CAST(t.created_date AS DATE) AS createdDate, COALESCE(SUM(t.amount), 0.0) AS amount
+                FROM parkx_transaction AS t
+                WHERE
+                    t.transaction_type = :transactionType
+                    AND t.created_date >= :from
+                    AND t.created_date <= :to
+                GROUP BY CAST(t.created_date AS DATE)
+                """,
+        resultSetMapping = "RevenueChart"
+)
+@SqlResultSetMapping(
+        name = "RevenueChart",
+        classes = @ConstructorResult(
+                targetClass = RevenueChart.class,
+                columns = {
+                        @ColumnResult(name = "createdDate", type = LocalDate.class),
+                        @ColumnResult(name = "amount", type = BigDecimal.class)
+                }
+        )
+)
 public class TransactionEntity extends Audit<String> {
 
     @Id
