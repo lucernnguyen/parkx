@@ -65,8 +65,8 @@ public class SystemStatisticFactory implements ISystemStatisticFactory {
     public List<RevenueChart> revenueByDateChart(RevenueStatisticRequest request) {
         return entityManager.createNamedQuery("revenueByDate")
                 .setParameter("transactionType", TransactionType.PAYMENT.name())
-                .setParameter("from", request.getFrom())
-                .setParameter("to", request.getTo())
+                .setParameter("from", request.getFrom().atStartOfDay())
+                .setParameter("to", request.getTo().atTime(LocalTime.MAX))
                 .getResultList();
     }
 
