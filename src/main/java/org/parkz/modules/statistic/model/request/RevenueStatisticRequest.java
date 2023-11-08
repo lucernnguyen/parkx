@@ -1,5 +1,7 @@
 package org.parkz.modules.statistic.model.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 
@@ -9,15 +11,9 @@ import java.time.LocalDate;
 public class RevenueStatisticRequest {
 
     @PastOrPresent
-    private LocalDate from;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private LocalDate from = LocalDate.now().minusDays(30);
     @PastOrPresent
-    private LocalDate to;
-
-    public LocalDate getFrom() {
-        return from == null ? LocalDate.now().minusDays(30) : from;
-    }
-
-    public LocalDate getTo() {
-        return to == null ? LocalDate.now() : to;
-    }
+    @JsonSetter(nulls = Nulls.SKIP)
+    private LocalDate to = LocalDate.now();
 }

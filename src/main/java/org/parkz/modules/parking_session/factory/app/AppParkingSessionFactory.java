@@ -17,8 +17,11 @@ import org.parkz.modules.parking_session.model.request.ConfirmCheckInRequest;
 import org.parkz.modules.parking_session.model.request.ConfirmCheckOutRequest;
 import org.parkz.modules.parking_session.model.request.CreateParkingSessionRequest;
 import org.parkz.modules.parking_session.model.request.InitCheckoutRequest;
+import org.parkz.modules.vehicle.entity.VehicleTypeEntity;
+import org.parkz.modules.vehicle.enums.VehicleTypeErrorCode;
 import org.parkz.modules.vehicle.factory.IVehicleFactory;
 import org.parkz.modules.vehicle.model.VehicleInfo;
+import org.parkz.modules.vehicle.repository.VehicleTypeRepository;
 import org.parkz.shared.event.parking_session.InitCheckOutEvent;
 import org.parkz.shared.event.parking_session.PaymentBeforeCheckOutEvent;
 import org.parkz.shared.event.parking_session.VehicleCheckInEvent;
@@ -49,6 +52,7 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
     @Qualifier("parkingSlotFactory")
     private final IParkingSlotFactory parkingSlotFactory;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final VehicleTypeRepository vehicleTypeRepository;
 
     @Override
     @Transactional
@@ -59,7 +63,14 @@ public class AppParkingSessionFactory extends ParkingSessionFactory implements I
             throw new InvalidException(conflict());
         }
         VehicleInfo vehicleInfo = vehicleFactory.getDetailModel(request.getVehicleId(), null);
+        //TODO check vehicle type total slot
         ParkingSlotInfo parkingSlotInfo = parkingSlotFactory.getParkingSlotNullable(request.getParkingSlotId());
+        VehicleTypeEntity vehicleType = vehicleTypeRepository.findById(vehicleInfo.getVehicleTypeId())
+                .orElseThrow(() -> new InvalidException(VehicleTypeErrorCode.VEHICLE_TYPE_NOT_FOUND));
+        int currentVehicleAmount = repository.countByVehicleTypeId(vehicleType.getId());
+        if (currentVehicleAmount >= vehicleType.getTotalSlot()) {
+            throw new InvalidException(ParkingSessionErrorCode.PARKING_SESSION_FULL_SLOT);
+        }
         if (parkingSlotInfo != null && parkingSlotInfo.isHasParking()) {
             log.warn("[PARKING_SESSION] Parking slot {} already used", request.getParkingSlotId());
             throw new InvalidException(ParkingSlotErrorCode.PARKING_SLOT_POSITION_ALREADY_USED);
