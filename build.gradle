@@ -76,7 +76,7 @@ repositories {
     //mavenNexus()
 	mavenLocal()
     mavenCentral()
-    /*maven {
+    maven {
         url "https://gitlab.com/api/v4/projects/50261899/packages/maven"
         name "Spring FastBoot"
         credentials(HttpHeaderCredentials) {
@@ -86,7 +86,7 @@ repositories {
         authentication {
             header(HttpHeaderAuthentication)
         }
-    }*/
+    }
 }
 
 dependencies {
